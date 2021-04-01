@@ -1,0 +1,16 @@
+module.exports = {
+    'name': 'Quick Finder',
+    'search': 'Search',
+    'setting': 'Setting',
+    'select': 'Hotkey',
+    'selectTooltip': 'Chose a hotkey to open the search bar quickly',
+    'custom': 'Custom',
+    'customPlaceholder': 'Choose a hotkey above or customize one by yourself',
+    'customTooltip': 'You can also customize your own hotkey',
+    'reference': '· Hotkey customization reference: [Keyboard Shortcuts](https://www.electronjs.org/docs/api/accelerator)',
+    'repository': '· Git repository of this extension: [ccc-quick-finder](https://gitee.com/ifaswind/ccc-quick-finder)',
+    'apply': 'Apply',
+    'quoteError': 'Do not use double quotes!',
+    'customError': 'Please specify a hotkey!',
+    'dataError': 'Load assets data failed, please reopen the search bar and try again!',
+};

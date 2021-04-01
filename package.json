@@ -1,0 +1,45 @@
+{
+  "name": "ccc-quick-finder",
+  "version": "1.0.0.20210402",
+  "description": "快速搜索定位文件（场景和预制体可以直接打开）",
+  "author": "ifaswind（陈皮皮）",
+  "author-info": {
+    "wechat": "im_chenpipi",
+    "email": "952157129@qq.com",
+    "git-home": "https://gitee.com/ifaswind",
+    "official-account": "公众号「菜鸟小栈」"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/ifaswind/ccc-quick-finder"
+  },
+  "main": "main.js",
+  "main-menu": {
+    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
+      "message": "ccc-quick-finder:open-search-panel",
+      "icon": "/images/search.png",
+      "accelerator": "F1"
+    },
+    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.setting": {
+      "message": "ccc-quick-finder:open-setting-panel"
+    }
+  },
+  "panel.setting": {
+    "main": "panel.setting/index.js",
+    "type": "fixed-size",
+    "title": "i18n:ccc-quick-finder.name",
+    "width": 550,
+    "height": 343
+  },
+  "reload": {
+    "renderer": [
+      "panel.setting/*"
+    ],
+    "ignore": [
+      "search/*",
+      "CHANGELOG.md",
+      "README.md",
+      "README.en.md"
+    ]
+  }
+}

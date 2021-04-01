@@ -1,0 +1,171 @@
+:root {
+    /* 主颜色 */
+    --main-color: white;
+    /* 强调色 */
+    --accent-color: #2e88fb;
+    /* 边框调色 */
+    --border-color: gray;
+    /* 按钮激活颜色 */
+    --btn-active-color: #0060dd;
+    /* 文本颜色 */
+    --font-color: black;
+    /* 错误颜色 */
+    --error-color: red;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* 主元素 */
+.main {
+    width: 500px;
+    height: 50px;
+}
+
+/* 搜索 */
+.search {
+    width: 500px;
+    height: 50px;
+    display: inline-flex;
+}
+
+/* 输入框 */
+.search-input {
+    width: 399px;
+    padding: 0 0 0 20px;
+    background-color: var(--main-color);
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 20px;
+    color: var(--font-color);
+}
+
+/* 输入错误动画 */
+.search-input-error {
+    animation: inputError 0.5s ease;
+}
+
+/* 输入错误动画 */
+@keyframes inputError {
+
+    0%,
+    50%,
+    100% {
+        color: var(--font-color);
+    }
+
+    25%,
+    75% {
+        color: var(--error-color);
+    }
+}
+
+/* 输入框:聚焦 */
+.search-input:focus {
+    outline: none;
+}
+
+/* 按钮 */
+.search-btn {
+    width: 80px;
+    margin: 0;
+    padding: 0;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 0 8px 8px 0;
+    font-size: 20px;
+    color: white;
+    user-select: none;
+}
+
+/* 按钮:点击 */
+.search-btn:active {
+    background-color: var(--btn-active-color);
+    color: rgb(206, 206, 206);
+}
+
+/* 按钮:聚焦 */
+.search-btn:focus {
+    outline: none;
+}
+
+/* 结果 */
+.result {
+    width: 498px;
+    margin: 5px 0 0 0;
+    background-color: var(--main-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+/* 结果列表 */
+.result-list {
+    max-height: 450px;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 8px;
+}
+
+/* 结果列表::滚动条 */
+.result-list::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* 结果列表::滚动条轨道 */
+.result-list::-webkit-scrollbar-track {
+    background-color: #f9f9f9;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 结果列表::滚动条滑块 */
+.result-list::-webkit-scrollbar-thumb {
+    background-color: #cacaca;
+    /* 使用和背景色相同的边框来达到内边距的效果 */
+    border: 2px solid #f9f9f9;
+    border-radius: 6px;
+}
+
+/* 结果列表::滚动条滑块:虚指 */
+.result-list::-webkit-scrollbar-thumb:hover {
+    background-color: #8d8c86;
+}
+
+/* 结果列表-条目 */
+.result-list li {
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    list-style: none;
+    user-select: none;
+}
+
+/* 结果列表-条目:虚指 */
+.result-list li:hover {
+    background-color: var(--accent-color);
+    color: white;
+    /* transition: all 0.3s ease; */
+}
+
+/* 结果列表条目 */
+.result-list-item {
+    color: var(--font-color);
+}
+
+/* 当前选中的结果列表条目 */
+.result-list-item-selected {
+    background-color: var(--main-color);
+    color: var(--accent-color);
+}
+
+/* 结果列表-条目-图标 */
+.result-list-item-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}

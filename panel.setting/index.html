@@ -1,0 +1,32 @@
+<div class="main">
+    <!-- 标题 -->
+    <h2>{{titleLabel}}</h2>
+    <ui-box-container class="layout vertical left">
+        <div>
+            <!-- 快捷键 -->
+            <ui-prop :name="selectLabel" :tooltip="selectTooltipLabel">
+                <ui-select class="flex-1" v-value="select" @change="onSelectChange">
+                    <option v-for="item in presets" :value="item.key">{{item.name}}</option>
+                </ui-select>
+            </ui-prop>
+            <!-- 自定义快捷键 -->
+            <ui-prop :name="customLabel" :tooltip="customTooltipLabel">
+                <ui-input class="flex-1" v-value="custom" :placeholder="customPlaceholderLabel"
+                    @change='onCustomChange'></ui-input>
+            </ui-prop>
+            <!-- 快捷键参考文档 -->
+            <ui-hint class="tip tiny top" position="-485px">
+                <ui-markdown style="height: 48px;" v-value="referenceLabel"></ui-markdown>
+            </ui-hint>
+            <!-- Git 仓库 -->
+            <ui-hint class="tip" style="margin-top: 5px;">
+                <ui-markdown style="height: 48px;" v-value="repositoryLabel"></ui-markdown>
+            </ui-hint>
+        </div>
+        <br>
+        <!-- 应用按钮 -->
+        <ui-button class="button blue big" @click="onApplyBtnClick" v-disabled="isProcessing">{{applyLabel}}
+        </ui-button>
+    </ui-box-container>
+    <br>
+</div>

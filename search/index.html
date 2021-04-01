@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Style -->
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+    <!-- DOM -->
+    <div id="app" class="main">
+        <!-- 搜索 -->
+        <div class="search">
+            <!-- 输入框 -->
+            <input class="search-input" ref="input" type="text" v-model="keyword" spellcheck="false"
+                :placeholder="placeholder" @input="onInputChange" @keydown.enter="onEnterBtnClick"
+                @keydown.up="onUpBtnClick" @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick"
+                @keydown.right="onRightBtnClick" autofocus></input>
+            <!-- 按钮 -->
+            <button class="search-btn" v-text="button" @click="onEnterBtnClick"></button>
+        </div>
+        <!-- 结果列表 -->
+        <div class="result" v-if="results.length > 0">
+            <ul class="result-list">
+                <li class="result-list-item" v-for="(value, index) in results" :key="index" :id="'item-' + index"
+                    :class="[(index === selectedIndex) ? 'result-list-item-selected' : '']"
+                    @click="onResultClick(value, index)" v-cloak>
+                    <img class="result-list-item-icon" :src="getIcon(value.extname)" alt="icon"></img>
+                    <span>{{value.name}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 脚本 -->
+    <script src="../vue.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

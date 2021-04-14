@@ -21,7 +21,8 @@
       "accelerator": "F1"
     },
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.setting": {
-      "message": "ccc-quick-finder:open-setting-panel"
+      "message": "ccc-quick-finder:open-setting-panel",
+      "icon": "/images/setting.png"
     }
   },
   "panel.setting": {

@@ -1,13 +1,17 @@
 const { readFileSync } = require('fs');
 
-/** i18n */
-const translate = Editor.T;
+/**
+ * i18n
+ * @param {string} key
+ * @returns {string}
+ */
+const translate = (key) => Editor.T(`${PACKAGE_NAME}.${key}`);
 
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
 
 /** 扩展名 */
-const EXTENSION_NAME = translate(`${PACKAGE_NAME}.name`);
+const EXTENSION_NAME = translate('name');
 
 // 注册面板
 Editor.Panel.extend({
@@ -36,18 +40,18 @@ Editor.Panel.extend({
        */
       data: {
         // 多语言文本
-        titleLabel: translate(`${PACKAGE_NAME}.setting`),
-        selectLabel: translate(`${PACKAGE_NAME}.select`),
-        selectTooltipLabel: translate(`${PACKAGE_NAME}.selectTooltip`),
-        customLabel: translate(`${PACKAGE_NAME}.custom`),
-        customPlaceholderLabel: translate(`${PACKAGE_NAME}.customPlaceholder`),
-        customTooltipLabel: translate(`${PACKAGE_NAME}.customTooltip`),
-        referenceLabel: translate(`${PACKAGE_NAME}.reference`),
-        repositoryLabel: translate(`${PACKAGE_NAME}.repository`),
-        applyLabel: translate(`${PACKAGE_NAME}.apply`),
+        titleLabel: translate('setting'),
+        selectLabel: translate('select'),
+        selectTooltipLabel: translate('selectTooltip'),
+        customLabel: translate('custom'),
+        customPlaceholderLabel: translate('customPlaceholder'),
+        customTooltipLabel: translate('customTooltip'),
+        referenceLabel: translate('reference'),
+        repositoryLabel: translate('repository'),
+        applyLabel: translate('apply'),
         // 预设快捷键
         presets: [
-          { key: 'custom', name: translate(`${PACKAGE_NAME}.custom`) },
+          { key: 'custom', name: translate('custom') },
           { key: 'F1', name: 'F1' },
           { key: 'F3', name: 'F3' },
           { key: 'F4', name: 'F4' },
@@ -102,13 +106,13 @@ Editor.Panel.extend({
             const custom = this.custom;
             // 输入是否有效
             if (custom === '') {
-              Editor.warn(`[${EXTENSION_NAME}]`, translate(`${PACKAGE_NAME}.customError`));
+              Editor.warn(`[${EXTENSION_NAME}]`, translate('customError'));
               return;
             }
             // 不可以使用双引号（避免 json 值中出现双引号而解析错误，导致插件加载失败）
             if (custom.includes('"')) {
               this.custom = this.custom.replace(/\"/g, '');
-              Editor.warn(`[${EXTENSION_NAME}]`, translate(`${PACKAGE_NAME}.quoteError`));
+              Editor.warn(`[${EXTENSION_NAME}]`, translate('quoteError'));
               return;
             }
             config.hotkey = custom;

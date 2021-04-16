@@ -1,16 +1,20 @@
-const ConfigManager = require('./config-manager');
-const FileUtil = require('./utils/file-utils');
 const { BrowserWindow, ipcMain } = require('electron');
 const Path = require('path');
+const ConfigManager = require('./config-manager');
+const FileUtil = require('./utils/file-utils');
 
-/** i18n */
-const translate = Editor.T;
+/**
+ * i18n
+ * @param {string} key
+ * @returns {string}
+ */
+const translate = (key) => Editor.T(`${PACKAGE_NAME}.${key}`);
 
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
 
 /** 扩展名 */
-const EXTENSION_NAME = translate(`${PACKAGE_NAME}.name`);
+const EXTENSION_NAME = translate('name');
 
 module.exports = {
 
@@ -36,7 +40,7 @@ module.exports = {
      * 打开搜索面板
      */
     'open-search-panel'() {
-      this.showSearchBar();
+      this.openSearchBar();
     },
 
     /**
@@ -131,12 +135,12 @@ module.exports = {
   },
 
   /**
-   * 展示搜索栏
+   * 打开搜索栏
    */
-  showSearchBar() {
+  openSearchBar() {
     // 已打开则关闭
     if (this.searchBar) {
-      this.hideSearchBar();
+      this.closeSearchBar();
       return;
     }
     // 创建窗口
@@ -158,28 +162,33 @@ module.exports = {
     });
     // 加载页面
     win.loadURL(`file://${__dirname}/search/index.html`);
-    // 调试用的 devtools（detach 模式需要将失焦自动隐藏关掉）
+    // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
     // win.webContents.openDevTools({ mode: 'detach' });
-    // 监听 ESC 按键（隐藏搜索栏）
+    // 监听按键（ESC 关闭）
     win.webContents.on('before-input-event', (event, input) => {
-      if (input.key === 'Escape') this.hideSearchBar();
+      if (input.key === 'Escape') {
+        this.closeSearchBar();
+      }
     });
-    // 展示后缓存数据
-    win.on('show', () => (this.cache = this.getAllFiles()));
-    // 失焦后自动隐藏
-    win.on('blur', () => this.hideSearchBar());
     // 就绪后展示（避免闪烁）
     win.on('ready-to-show', () => win.show());
+    // 展示后（缓存数据）
+    win.on('show', () => (this.cache = this.getAllFiles()));
+    // 失焦后（自动关闭）
+    win.on('blur', () => this.closeSearchBar());
+    // 关闭后（移除引用）
+    win.on('closed', () => (this.searchBar = null));
   },
 
   /**
-   * 隐藏搜索栏
+   * 关闭搜索栏
    */
-  hideSearchBar() {
-    if (!this.searchBar) return;
+  closeSearchBar() {
+    if (!this.searchBar) {
+      return;
+    }
     this.searchBar.close();
-    this.searchBar = null;
-    // 清除缓存
+    // 移除缓存
     this.cache = null;
   },
 
@@ -251,7 +260,7 @@ module.exports = {
       // 排序（similarity 越小，匹配的长度越短，匹配度越高）
       results.sort((a, b) => a.similarity - b.similarity);
     } else {
-      Editor.warn(`[${EXTENSION_NAME}]`, translate(`${PACKAGE_NAME}.dataError`));
+      Editor.warn(`[${EXTENSION_NAME}]`, translate('dataError'));
     }
     // Done
     return results;
@@ -280,7 +289,7 @@ module.exports = {
         break;
     }
     // 隐藏搜索栏
-    this.hideSearchBar();
+    this.closeSearchBar();
   },
 
   /**

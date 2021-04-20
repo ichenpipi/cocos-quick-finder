@@ -1,7 +1,7 @@
 {
   "name": "ccc-quick-finder",
-  "version": "1.0.0.20210402",
-  "description": "快速搜索定位文件（场景和预制体可以直接打开）",
+  "version": "1.1.0.20210422",
+  "description": "快速搜索定位文件，可以直接打开场景和预制体",
   "author": "ifaswind（陈皮皮）",
   "author-info": {
     "wechat": "im_chenpipi",

@@ -144,22 +144,26 @@ module.exports = {
       return;
     }
     // 创建窗口
-    const win = this.searchBar = new BrowserWindow({
-      width: 500,
-      height: 600,
-      frame: false,
-      resizable: false,
-      skipTaskbar: true,
-      alwaysOnTop: true,
-      transparent: true,
-      opacity: 0.95,
-      backgroundColor: '#00000000',
-      hasShadow: false,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true
-      },
-    });
+    const winSize = [500, 600],
+      winPos = this.getPosition(winSize),
+      win = this.searchBar = new BrowserWindow({
+        width: winSize[0],
+        height: winSize[1],
+        x: winPos[0],
+        y: winPos[1],
+        frame: false,
+        resizable: false,
+        skipTaskbar: true,
+        alwaysOnTop: true,
+        transparent: true,
+        opacity: 0.95,
+        backgroundColor: '#00000000',
+        hasShadow: false,
+        show: false,
+        webPreferences: {
+          nodeIntegration: true
+        },
+      });
     // 加载页面
     win.loadURL(`file://${__dirname}/search/index.html`);
     // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
@@ -190,6 +194,23 @@ module.exports = {
     this.searchBar.close();
     // 移除缓存
     this.cache = null;
+  },
+
+  /**
+   * 获取窗口位置
+   * @param {[number, number]} size 窗口尺寸
+   * @returns {[number, number]}
+   */
+  getPosition(size) {
+    // 根据编辑器窗口的位置和尺寸来计算
+    const editorWin = BrowserWindow.getFocusedWindow(),
+      editorSize = editorWin.getSize(),
+      editorPos = editorWin.getPosition(),
+      // 需要注意一个问题：窗口的位置值必须是整数，否则修改不会生效
+      // 毕竟像素应该是显示器上的最低单位了，合理
+      x = Math.floor(editorPos[0] + (editorSize[0] / 2) - (size[0] / 2)),
+      y = Math.floor(editorPos[1] + 200);
+    return [x, y];
   },
 
   /**

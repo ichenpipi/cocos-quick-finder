@@ -42,24 +42,20 @@ body {
     border-radius: 8px 0 0 8px;
     font-size: 20px;
     color: var(--font-color);
+    user-select: none;
 }
 
-/* 输入错误动画 */
+/* 输入错误 */
 .search-input-error {
     animation: inputError 0.5s ease;
 }
 
-/* 输入错误动画 */
+/* 输入错误关键帧 */
 @keyframes inputError {
-
-    0%,
-    50%,
-    100% {
+    0%, 50%, 100% {
         color: var(--font-color);
     }
-
-    25%,
-    75% {
+    25%, 75% {
         color: var(--error-color);
     }
 }

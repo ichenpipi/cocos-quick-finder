@@ -165,7 +165,7 @@ module.exports = {
         },
       });
     // 加载页面
-    win.loadURL(`file://${__dirname}/search/index.html`);
+    win.loadURL(`file://${__dirname}/panels/search/index.html`);
     // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
     // win.webContents.openDevTools({ mode: 'detach' });
     // 监听按键（ESC 关闭）

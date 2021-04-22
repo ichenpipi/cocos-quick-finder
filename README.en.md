@@ -4,7 +4,7 @@
 
 [Cocos Creator Editor Extension]
 
-**Press the hotkey to open the search bar, enter the file name then you can locate the file quickly, for scenes or prefabs you can open it directly.**
+**Press the hotkey to open the search bar, enter the file name then you can locate the file immediately, for scenes or prefabs you can open it directly.**
 
 
 
@@ -49,6 +49,8 @@ You can find this extension in Cocos Store now, click on *Extension -> Cocos Sto
 Enter "**Quick Finder**" in the search bar, find it and then install it.
 
 ![cocos-store](https://gitee.com/ifaswind/image-storage/raw/master/repositories/ccc-quick-finder/cocos-store.png)
+
+*Quick Finder：[http://store.cocos.com/app/detail/2745](http://store.cocos.com/app/detail/2745)*
 
 
 

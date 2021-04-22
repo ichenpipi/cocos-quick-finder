@@ -248,7 +248,7 @@ new Vue({
      */
     getIcon(extname) {
       const iconName = iconMap[extname] || 'asset';
-      return `../images/assets/${iconName}.png`;
+      return `../../images/assets/${iconName}.png`;
     },
 
   },

@@ -50,6 +50,8 @@
 
 ![cocos-store](https://gitee.com/ifaswind/image-storage/raw/master/repositories/ccc-quick-finder/cocos-store.png)
 
+*Quick Finder：[http://store.cocos.com/app/detail/2745](http://store.cocos.com/app/detail/2745)*
+
 
 
 ### 自行下载安装

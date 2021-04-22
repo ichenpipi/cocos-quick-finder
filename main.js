@@ -3,15 +3,15 @@ const Path = require('path');
 const ConfigManager = require('./config-manager');
 const FileUtil = require('./utils/file-utils');
 
+/** 包名 */
+const PACKAGE_NAME = 'ccc-quick-finder';
+
 /**
  * i18n
  * @param {string} key
  * @returns {string}
  */
 const translate = (key) => Editor.T(`${PACKAGE_NAME}.${key}`);
-
-/** 包名 */
-const PACKAGE_NAME = 'ccc-quick-finder';
 
 /** 扩展名 */
 const EXTENSION_NAME = translate('name');

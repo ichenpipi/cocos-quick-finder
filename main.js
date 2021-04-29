@@ -191,6 +191,11 @@ module.exports = {
     if (!this.searchBar) {
       return;
     }
+    // 先隐藏
+    // 在 2.4.5 版本中，扩展如果安装在局部，关闭搜索栏会引发编辑器闪退
+    // 原因未知，修改为先隐藏再关闭就没问题了（离谱）
+    this.searchBar.hide();
+    // 关闭
     this.searchBar.close();
     // 移除缓存
     this.cache = null;

@@ -34,12 +34,13 @@ body {
 
 /* 输入框 */
 .search-input {
-    width: 399px;
-    padding: 0 0 0 20px;
+    width: 420px;
     background-color: var(--main-color);
+    padding: 0 0 0 20px;
     border: 1px solid var(--border-color);
     border-right: none;
     border-radius: 8px 0 0 8px;
+    box-sizing: border-box;
     font-size: 20px;
     color: var(--font-color);
     user-select: none;
@@ -91,11 +92,12 @@ body {
 
 /* 结果 */
 .result {
-    width: 498px;
+    width: 500px;
     margin: 5px 0 0 0;
     background-color: var(--main-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
+    box-sizing: border-box;
 }
 
 /* 结果列表 */

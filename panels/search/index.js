@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const BrowserUtils = require('../../utils/browser-utils.js');
 
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
@@ -188,12 +189,11 @@ new Vue({
     },
 
     /**
-     * （主进程）获取语言回调
-     * @param {*} event 
-     * @param {string} lang 语言
+     * 更新语言
      */
-    onGetLangReply(event, lang) {
-      const texts = lang.includes('zh') ? zh : en;
+    updateLang() {
+      const lang = BrowserUtils.getUrlParam('lang'),
+        texts = lang.includes('zh') ? zh : en;
       this.placeholder = texts.placeholder;
       this.button = texts.button;
     },
@@ -258,12 +258,14 @@ new Vue({
    */
   mounted() {
     // 监听事件
-    ipcRenderer.on(`${PACKAGE_NAME}:get-lang-reply`, this.onGetLangReply.bind(this));
     ipcRenderer.on(`${PACKAGE_NAME}:match-keyword-reply`, this.onMatchKeywordReply.bind(this));
-    // 发送事件：获取语言
-    ipcRenderer.send(`${PACKAGE_NAME}:get-lang`);
-    // （下一帧）聚焦到输入框
-    this.$nextTick(() => this.focusOnInputField());
+    // 下一帧
+    this.$nextTick(() => {
+      // 更新语言
+      this.updateLang();
+      // 聚焦到输入框
+      this.focusOnInputField()
+    });
   },
 
   /**
@@ -271,7 +273,6 @@ new Vue({
    */
   beforeDestroy() {
     // 取消事件监听
-    ipcRenderer.removeAllListeners(`${PACKAGE_NAME}:get-lang-reply`);
     ipcRenderer.removeAllListeners(`${PACKAGE_NAME}:match-keyword-reply`);
   },
 

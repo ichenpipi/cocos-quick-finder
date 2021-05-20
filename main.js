@@ -76,7 +76,6 @@ module.exports = {
    */
   load() {
     // 监听事件
-    ipcMain.on(`${PACKAGE_NAME}:get-lang`, this.onGetLangEvent.bind(this));
     ipcMain.on(`${PACKAGE_NAME}:match-keyword`, this.onMatchKeywordEvent.bind(this));
     ipcMain.on(`${PACKAGE_NAME}:open`, this.onOpenEvent.bind(this));
     ipcMain.on(`${PACKAGE_NAME}:focus`, this.onFocusEvent.bind(this));
@@ -87,19 +86,9 @@ module.exports = {
    */
   unload() {
     // 取消事件监听
-    ipcMain.removeAllListeners(`${PACKAGE_NAME}:get-lang`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
-  },
-
-  /**
-   * （渲染进程）获取语言事件回调
-   * @param {*} event 
-   */
-  onGetLangEvent(event) {
-    const lang = Editor.lang;
-    event.reply(`${PACKAGE_NAME}:get-lang-reply`, lang);
   },
 
   /**
@@ -164,8 +153,9 @@ module.exports = {
           nodeIntegration: true
         },
       });
-    // 加载页面
-    win.loadURL(`file://${__dirname}/panels/search/index.html`);
+    // 加载页面（并传递当前语言）
+    const lang = Editor.lang;
+    win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${lang}`);
     // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
     // win.webContents.openDevTools({ mode: 'detach' });
     // 监听按键（ESC 关闭）

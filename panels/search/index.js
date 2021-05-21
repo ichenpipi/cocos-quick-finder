@@ -26,9 +26,9 @@ new Vue({
     /** 关键词匹配返回的结果 */
     results: [],
     /** 当前选中的项目 */
-    selected: null,
+    curItem: null,
     /** 当前选中的项目下标 */
-    selectedIndex: -1,
+    curIndex: -1,
     /** 分段加载定时器 */
     loadHandler: null,
   },
@@ -50,8 +50,8 @@ new Vue({
         this.loadHandler = null;
       }
       // 取消当前选中
-      this.selected = null;
-      this.selectedIndex = -1;
+      this.curItem = null;
+      this.curIndex = -1;
       // 关键字为空或无效时不进行搜索
       const keyword = this.keyword;
       if (keyword === '' || keyword.includes('...')) {
@@ -67,18 +67,18 @@ new Vue({
      * @param {*} event 
      */
     onEnterBtnClick(event) {
-      const selected = this.selected;
-      if (!selected) {
+      const item = this.curItem;
+      if (!item) {
         if (this.keyword !== '') {
           // 输入框文本错误动画
           const input = this.$refs.input;
-          input.classList.add('search-input-error');
-          setTimeout(() => input.classList.remove('search-input-error'), 500);
+          input.classList.add('input-error');
+          setTimeout(() => input.classList.remove('input-error'), 500);
         }
       } else {
-        this.keyword = selected.name;
+        this.keyword = item.name;
         // 发消息给主进程
-        ipcRenderer.send(`${PACKAGE_NAME}:open`, selected.path);
+        ipcRenderer.send(`${PACKAGE_NAME}:open`, item.path);
       }
       // 聚焦到输入框（此时焦点在按钮或列表上）
       this.focusOnInputField();
@@ -92,10 +92,10 @@ new Vue({
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 循环选择
-      if (this.selectedIndex > 0) {
-        this.selectedIndex--;
+      if (this.curIndex > 0) {
+        this.curIndex--;
       } else {
-        this.selectedIndex = this.results.length - 1;
+        this.curIndex = this.results.length - 1;
       }
       // 更新选择
       this.updateSelected();
@@ -109,10 +109,10 @@ new Vue({
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 循环选择
-      if (this.selectedIndex >= this.results.length - 1) {
-        this.selectedIndex = 0;
+      if (this.curIndex >= this.results.length - 1) {
+        this.curIndex = 0;
       } else {
-        this.selectedIndex++;
+        this.curIndex++;
       }
       // 更新选择
       this.updateSelected();
@@ -122,10 +122,10 @@ new Vue({
      * 更新当前的选择
      */
     updateSelected() {
-      this.selected = this.results[this.selectedIndex];
-      this.keyword = this.selected.name;
+      this.curItem = this.results[this.curIndex];
+      this.keyword = this.curItem.name;
       // 只有当目标元素不在可视区域内才滚动
-      const id = `item-${this.selectedIndex}`;
+      const id = `item-${this.curIndex}`;
       document.getElementById(id).scrollIntoViewIfNeeded(false);
     },
 
@@ -135,7 +135,7 @@ new Vue({
      */
     onLeftBtnClick(event) {
       // 是否已选中项目
-      if (!this.selected) return;
+      if (!this.curItem) return;
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 在资源管理器中显示并选中文件
@@ -148,7 +148,7 @@ new Vue({
      */
     onRightBtnClick(event) {
       // 是否已选中项目
-      if (!this.selected) return;
+      if (!this.curItem) return;
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 在资源管理器中显示并选中文件
@@ -160,20 +160,20 @@ new Vue({
      */
     showFileInAssets() {
       // 当前选中文件路径
-      const path = this.selected.path;
+      const path = this.curItem.path;
       // 发消息给主进程
       ipcRenderer.send(`${PACKAGE_NAME}:focus`, path);
     },
 
     /**
      * 结果点击回调
-     * @param {{ name: string, path: string, extname: string }} value 数据
+     * @param {{ name: string, path: string, extname: string }} item 数据
      * @param {number} index 下标
      */
-    onResultClick(value, index) {
-      this.selectedIndex = parseInt(index);
-      this.selected = value;
-      this.keyword = value.name;
+    onResultClick(item, index) {
+      this.curIndex = parseInt(index);
+      this.curItem = item;
+      this.keyword = item.name;
       // 添加组件
       this.onEnterBtnClick(null);
       // 聚焦到输入框（此时焦点在列表上）
@@ -209,8 +209,8 @@ new Vue({
       // 当只有一个结果时直接选中
       if (results.length === 1) {
         this.results = results;
-        this.selectedIndex = 0;
-        this.selected = results[0];
+        this.curIndex = 0;
+        this.curItem = results[0];
         return;
       }
       // 结果数量多时分段加载

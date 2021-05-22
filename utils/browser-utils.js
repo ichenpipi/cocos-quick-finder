@@ -1,3 +1,7 @@
+/**
+ * 浏览器工具
+ * @version 20210520
+ */
 const BrowserUtils = {
 
     /**

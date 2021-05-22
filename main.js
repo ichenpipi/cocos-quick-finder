@@ -1,7 +1,7 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const Path = require('path');
 const ConfigManager = require('./config-manager');
-const FileUtil = require('./utils/file-utils');
+const FileUtils = require('./utils/file-utils');
 
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
@@ -224,7 +224,7 @@ module.exports = {
       }
     }
     // 遍历项目文件
-    FileUtil.map(assetsPath, handler);
+    FileUtils.map(assetsPath, handler);
     // Done
     return results;
   },

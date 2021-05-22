@@ -1,7 +1,11 @@
 const Fs = require('fs');
 const Path = require('path');
 
-const FileUtil = {
+/**
+ * 文件工具
+ * @version 20210520
+ */
+const FileUtils = {
 
     /**
      * 复制文件/文件夹
@@ -60,4 +64,4 @@ const FileUtil = {
 
 }
 
-module.exports = FileUtil;
+module.exports = FileUtils;

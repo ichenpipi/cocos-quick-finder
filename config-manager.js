@@ -19,7 +19,7 @@ const ConfigManager = {
      * 读取配置
      * @returns {{ hotkey: string }}
      */
-    read() {
+    get() {
         const jsonData = JSON.parse(Fs.readFileSync(packageFilePath)),
             config = Object.create(null);
         // 快捷键
@@ -32,7 +32,7 @@ const ConfigManager = {
      * 保存配置
      * @param {{ hotkey: string }} config 配置
      */
-    save(config) {
+    set(config) {
         const jsonData = JSON.parse(Fs.readFileSync(packageFilePath)),
             menuItem = jsonData['main-menu'][menuItemKey];
         // 快捷键

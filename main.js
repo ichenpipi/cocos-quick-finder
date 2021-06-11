@@ -110,7 +110,7 @@ function onOpenEvent(event, path) {
 function onFocusEvent(event, path) {
   // 在资源管理器中显示并选中文件
   const uuid = Editor.assetdb.fspathToUuid(path);
-  showFileInAssets(uuid);
+  focusOnFile(uuid);
 }
 
 /**
@@ -332,8 +332,8 @@ function openFile(path) {
       openPrefab(uuid);
       break;
     default:
-      // 在资源管理器中显示并选中文件
-      showFileInAssets(uuid);
+      // 聚焦到文件
+      focusOnFile(uuid);
       break;
   }
   // 隐藏搜索栏
@@ -357,10 +357,10 @@ function openPrefab(uuid) {
 }
 
 /**
- * 在资源管理器中显示并选中文件
+ * 聚焦到文件（在资源管理器中显示并选中文件）
  * @param {string} uuid uuid
  */
-function showFileInAssets(uuid) {
+function focusOnFile(uuid) {
   Editor.Ipc.sendToAll('assets:hint', uuid);
   Editor.Selection.select('asset', uuid);
 }

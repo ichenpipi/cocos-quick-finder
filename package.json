@@ -34,10 +34,10 @@
   },
   "reload": {
     "renderer": [
-      "panel.setting/*"
+      "panel.setting/**/*"
     ],
     "ignore": [
-      "search/*",
+      "panels/**/*",
       "CHANGELOG.md",
       "README.md",
       "README.en.md"

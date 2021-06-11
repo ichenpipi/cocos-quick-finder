@@ -152,7 +152,7 @@ function openSearchBar() {
       hasShadow: false,
       show: false,
       webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
       },
     });
   // 加载页面（并传递当前语言）
@@ -171,7 +171,7 @@ function openSearchBar() {
   // 失焦后（自动关闭）
   win.on('blur', () => closeSearchBar());
   // 关闭后（移除引用）
-  // win.on('closed', () => (searchBar = null));
+  win.on('closed', () => (searchBar = null));
   // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
   // win.webContents.openDevTools({ mode: 'detach' });
 }

@@ -4,33 +4,29 @@ const BrowserUtils = require('../../utils/browser-utils.js');
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
 
-// 创建 Vue 实例
-new Vue({
+// 应用
+const App = {
 
   /**
-   * 挂载目标
-   * @type {string | Element}
+   * 数据
    */
-  el: "#app",
-
-  /**
-   * 数据对象
-   */
-  data: {
-    /** 输入框占位符文本 */
-    placeholder: '',
-    /** 确认按钮文本 */
-    button: '',
-    /** 输入的关键字 */
-    keyword: '',
-    /** 关键词匹配返回的结果 */
-    results: [],
-    /** 当前选中的项目 */
-    curItem: null,
-    /** 当前选中的项目下标 */
-    curIndex: -1,
-    /** 分段加载定时器 */
-    loadHandler: null,
+  data() {
+    return {
+      /** 输入框占位符文本 */
+      placeholder: '',
+      /** 确认按钮文本 */
+      button: '',
+      /** 输入的关键字 */
+      keyword: '',
+      /** 关键词匹配返回的结果 */
+      results: [],
+      /** 当前选中的项目 */
+      curItem: null,
+      /** 当前选中的项目下标 */
+      curIndex: -1,
+      /** 分段加载定时器 */
+      loadHandler: null,
+    };
   },
 
   /**
@@ -276,18 +272,23 @@ new Vue({
     ipcRenderer.removeAllListeners(`${PACKAGE_NAME}:match-keyword-reply`);
   },
 
-});
+};
+
+// 创建实例
+const app = Vue.createApp(App);
+// 挂载
+app.mount('#app');
 
 /** 多语言：中文 */
 const zh = {
   placeholder: '请输入文件名称...',
-  button: 'GO'
+  button: 'GO',
 }
 
 /** 多语言：英语 */
 const en = {
   placeholder: 'Enter file name...',
-  button: 'GO'
+  button: 'GO',
 }
 
 /** 文件扩展名对应图标表 */

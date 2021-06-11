@@ -26,13 +26,13 @@
                 <li class="item" v-for="(item, index) in results" :key="index" :id="'item-' + index"
                     :class="{ 'item-selected': (index === curIndex) }" @click="onResultClick(item, index)" v-cloak>
                     <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
-                    <span class="name">{{item.name}}</span>
+                    <span class="name">{{ item.name }}</span>
                 </li>
             </ul>
         </div>
     </div>
     <!-- 脚本 -->
-    <script src="../../lib/vue.min.js"></script>
+    <script src="../../lib/vue.global.prod.js"></script>
     <script src="index.js"></script>
 </body>
 

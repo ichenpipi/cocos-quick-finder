@@ -33,9 +33,7 @@
     "height": 343
   },
   "reload": {
-    "renderer": [
-      "panel.setting/**/*"
-    ],
+    "renderer": [],
     "ignore": [
       "panels/**/*",
       "CHANGELOG.md",

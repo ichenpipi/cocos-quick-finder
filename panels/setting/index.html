@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+    <!-- 页面 -->
+    <div id="app">
+        <div class="title">{{ titleLabel }}</div>
+        <div class="main">
+            <div class="prop">
+                <div class="label">
+                    <span class="text">{{ selectLabel }}</span>
+                    <span class="tooltip">{{ selectTooltipLabel }}</span>
+                </div>
+                <div class="content">
+                    <select v-model="select">
+                        <option v-for="item in presets" :key="item.key" :value="item.key">{{ item.name }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="prop">
+                <div class="label">
+                    <span class="text">{{ customLabel }}</span>
+                    <span class="tooltip">{{ customTooltipLabel }}</span>
+                </div>
+                <div class="content">
+                    <input v-model="custom" :placeholder="customPlaceholderLabel">
+                </div>
+            </div>
+            <div class="tip">
+                <span>{{ referenceLabel }}</span>
+                <a href="https://www.electronjs.org/docs/api/accelerator" target="_blank">{{ acceleratorLabel }}</a>
+            </div>
+            <div class="tip">
+                <span>{{ repositoryLabel }}</span>
+                <a href="https://gitee.com/ifaswind/ccc-quick-finder" target="_blank">ccc-quick-finder</a>
+            </div>
+            <div class="line"></div>
+            <button class="apply-btn" @click="onApplyBtnClick">{{ applyLabel }}</button>
+        </div>
+    </div>
+    <!-- 脚本 -->
+    <script src="../../lib/vue.global.prod.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

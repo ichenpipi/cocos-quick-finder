@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <!-- Style -->
+    <!-- 样式 -->
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
@@ -13,12 +13,12 @@
         <!-- 搜索 -->
         <div class="search">
             <!-- 输入框 -->
-            <input class="input" ref="input" type="text" v-model="keyword" spellcheck="false" :placeholder="placeholder"
+            <input class="input" ref="input" type="text" v-model="keyword" :placeholder="placeholderLabel"
                 @input="onInputChange" @keydown.enter="onEnterBtnClick" @keydown.up="onUpBtnClick"
                 @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick" @keydown.right="onRightBtnClick"
-                autofocus></input>
+                spellcheck="false" autofocus></input>
             <!-- 按钮 -->
-            <button class="btn" v-text="button" @click="onEnterBtnClick"></button>
+            <button class="btn" v-text="buttonLabel" @click="onEnterBtnClick"></button>
         </div>
         <!-- 结果列表 -->
         <div class="result" v-if="results.length > 0">

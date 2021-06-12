@@ -67,6 +67,7 @@ module.exports = {
     ipcMain.on(`${PACKAGE_NAME}:match-keyword`, onMatchKeywordEvent);
     ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
     ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
+    ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
   },
 
   /**
@@ -77,6 +78,7 @@ module.exports = {
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
+    ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
   },
 
 }
@@ -111,6 +113,30 @@ function onFocusEvent(event, path) {
   // 在资源管理器中显示并选中文件
   const uuid = Editor.assetdb.fspathToUuid(path);
   focusOnFile(uuid);
+}
+
+/**
+ * （渲染进程）打印事件回调
+ * @param {*} event 
+ * @param {{ type: string, content: string }} options 选项
+ */
+function onPrintEvent(event, options) {
+  const { type, content } = options,
+    _content = `[${EXTENSION_NAME}] ${content}`;
+  switch (type) {
+    case 'log': {
+      Editor.log(_content);
+      break;
+    }
+    case 'warn': {
+      Editor.warn(_content);
+      break;
+    }
+    case 'error': {
+      Editor.error(_content);
+      break;
+    }
+  }
 }
 
 /**
@@ -195,11 +221,74 @@ function closeSearchBar() {
   searchBar = null;
 }
 
+let settingPanel = null;
+
 /**
  * 打开设置面板
  */
 function openSettingPanel() {
-  Editor.Panel.open(`${PACKAGE_NAME}.setting`);
+  // Editor.Panel.open(`${PACKAGE_NAME}.setting`);
+  // 已打开则关闭
+  if (settingPanel) {
+    closeSettingPanel();
+    return;
+  }
+  // 创建窗口
+  const winSize = [500, 330],
+    winPos = getPosition(winSize),
+    win = settingPanel = new BrowserWindow({
+      width: winSize[0],
+      height: winSize[1],
+      minWidth: winSize[0],
+      minHeight: winSize[1],
+      x: winPos[0],
+      y: winPos[1],
+      frame: true,
+      title: `${EXTENSION_NAME} | Cocos Creator`,
+      autoHideMenuBar: true,
+      resizable: true,
+      minimizable: false,
+      maximizable: false,
+      skipTaskbar: true,
+      alwaysOnTop: true,
+      hasShadow: false,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
+  // 加载页面（并传递当前语言）
+  const lang = Editor.lang;
+  win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${lang}`);
+  // 监听按键（ESC 关闭）
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'Escape') {
+      closeSettingPanel();
+    }
+  });
+  // 就绪后展示（避免闪烁）
+  win.on('ready-to-show', () => win.show());
+  // 失焦后（自动关闭）
+  win.on('blur', () => closeSettingPanel());
+  // 关闭后（移除引用）
+  win.on('closed', () => (settingPanel = null));
+  // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
+  // win.webContents.openDevTools({ mode: 'detach' });
+}
+
+/**
+ * 关闭搜索栏
+ */
+function closeSettingPanel() {
+  if (!settingPanel) {
+    return;
+  }
+  // 先隐藏再关闭
+  settingPanel.hide();
+  // 关闭
+  settingPanel.close();
+  // 移除引用
+  settingPanel = null;
 }
 
 /**

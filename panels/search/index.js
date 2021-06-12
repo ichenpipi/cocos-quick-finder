@@ -1,8 +1,19 @@
 const { ipcRenderer } = require('electron');
-const BrowserUtils = require('../../utils/browser-utils.js');
+const { getUrlParam } = require('../../utils/browser-utils');
+const I18n = require('../../i18n/i18n');
 
 /** 包名 */
 const PACKAGE_NAME = 'ccc-quick-finder';
+
+/** 语言 */
+const LANG = getUrlParam('lang');
+
+/**
+ * i18n
+ * @param {string} key
+ * @returns {string}
+ */
+const translate = (key) => I18n.translate(LANG, key);
 
 // 应用
 const App = {
@@ -13,9 +24,9 @@ const App = {
   data() {
     return {
       /** 输入框占位符文本 */
-      placeholder: '',
+      placeholderLabel: translate('searchPlaceholder'),
       /** 确认按钮文本 */
-      button: '',
+      buttonLabel: translate('searchBtn'),
       /** 输入的关键字 */
       keyword: '',
       /** 关键词匹配返回的结果 */
@@ -185,16 +196,6 @@ const App = {
     },
 
     /**
-     * 更新语言
-     */
-    updateLang() {
-      const lang = BrowserUtils.getUrlParam('lang'),
-        texts = lang.includes('zh') ? zh : en;
-      this.placeholder = texts.placeholder;
-      this.button = texts.button;
-    },
-
-    /**
      * （主进程）匹配关键词回调
      * @param {*} event 
      * @param {{ name: string, path: string, extname: string }[]} results 结果
@@ -257,8 +258,6 @@ const App = {
     ipcRenderer.on(`${PACKAGE_NAME}:match-keyword-reply`, this.onMatchKeywordReply.bind(this));
     // 下一帧
     this.$nextTick(() => {
-      // 更新语言
-      this.updateLang();
       // 聚焦到输入框
       this.focusOnInputField()
     });
@@ -278,18 +277,6 @@ const App = {
 const app = Vue.createApp(App);
 // 挂载
 app.mount('#app');
-
-/** 多语言：中文 */
-const zh = {
-  placeholder: '请输入文件名称...',
-  button: 'GO',
-}
-
-/** 多语言：英语 */
-const en = {
-  placeholder: 'Enter file name...',
-  button: 'GO',
-}
 
 /** 文件扩展名对应图标表 */
 const iconMap = {

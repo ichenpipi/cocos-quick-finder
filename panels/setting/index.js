@@ -56,7 +56,6 @@ const App = {
 
   /**
    * 监听器
-   * @type {{ [key: string]: Function }}
    */
   watch: {
 
@@ -82,7 +81,6 @@ const App = {
 
   /**
    * 实例函数
-   * @type {{ [key: string]: Function }}
    */
   methods: {
 

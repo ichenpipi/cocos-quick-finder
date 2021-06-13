@@ -23,26 +23,24 @@ const App = {
    */
   data() {
     return {
-      /** 输入框占位符文本 */
+      // 多语言文本
       placeholderLabel: translate('searchPlaceholder'),
-      /** 确认按钮文本 */
       buttonLabel: translate('searchBtn'),
-      /** 输入的关键字 */
+      // 输入的关键字
       keyword: '',
-      /** 关键词匹配返回的结果 */
+      // 关键词匹配返回的结果
       results: [],
-      /** 当前选中的项目 */
+      // 当前选中的项目
       curItem: null,
-      /** 当前选中的项目下标 */
+      // 当前选中的项目下标
       curIndex: -1,
-      /** 分段加载定时器 */
+      // 分帧加载定时器
       loadHandler: null,
     };
   },
 
   /**
    * 实例函数
-   * @type {{ [key: string]: Function }}
    */
   methods: {
 
@@ -146,7 +144,7 @@ const App = {
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 在资源管理器中显示并选中文件
-      this.showFileInAssets();
+      this.focusOnFileInAssets();
     },
 
     /**
@@ -159,13 +157,13 @@ const App = {
       // 阻止默认事件（光标移动）
       event.preventDefault();
       // 在资源管理器中显示并选中文件
-      this.showFileInAssets();
+      this.focusOnFileInAssets();
     },
 
     /**
      * 在资源管理器中显示并选中文件
      */
-    showFileInAssets() {
+    focusOnFileInAssets() {
       // 当前选中文件路径
       const path = this.curItem.path;
       // 发消息给主进程
@@ -211,9 +209,9 @@ const App = {
         return;
       }
       // 结果数量多时分段加载
-      if (results.length >= 300) {
+      if (results.length >= 200) {
         // 每次加载的数量
-        const threshold = 150;
+        const threshold = 100;
         // 分段加载函数
         const load = () => {
           const length = results.length,
@@ -259,7 +257,7 @@ const App = {
     // 下一帧
     this.$nextTick(() => {
       // 聚焦到输入框
-      this.focusOnInputField()
+      this.focusOnInputField();
     });
   },
 

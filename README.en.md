@@ -97,6 +97,18 @@ One thing you should know, not every keys/keys-combinations can be used, because
 
 
 
+## Change log
+
+[Releases](https://gitee.com/ifaswind/ccc-quick-finder/releases)
+
+
+
+## License
+
+This project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
 ---
 
 

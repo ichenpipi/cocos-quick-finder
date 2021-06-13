@@ -97,6 +97,18 @@
 
 
 
+## 更新日志
+
+[发行版](https://gitee.com/ifaswind/ccc-quick-finder/releases)
+
+
+
+## 许可
+
+本项目使用 [MIT license](https://opensource.org/licenses/MIT) 许可证书。
+
+
+
 ---
 
 

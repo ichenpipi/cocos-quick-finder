@@ -41,8 +41,8 @@ body {
   border-right: none;
   border-radius: 8px 0 0 8px;
   box-sizing: border-box;
-  font-size: 20px;
   color: var(--font-color);
+  font-size: 20px;
   user-select: none;
 }
 
@@ -63,7 +63,6 @@ body {
   100% {
     color: var(--font-color);
   }
-
   25%,
   75% {
     color: var(--error-color);
@@ -78,9 +77,11 @@ body {
   background-color: var(--accent-color);
   border: none;
   border-radius: 0 8px 8px 0;
-  font-size: 20px;
+  box-sizing: border-box;
   color: white;
+  font-size: 20px;
   user-select: none;
+  cursor: pointer;
 }
 
 /* 按钮:点击 */

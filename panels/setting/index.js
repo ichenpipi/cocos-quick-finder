@@ -4,7 +4,7 @@ const ConfigManager = require('../../config-manager');
 const I18n = require('../../i18n/i18n');
 
 /** 包名 */
-const PACKAGE_NAME = 'ccc-quick-finder';
+const PACKAGE_NAME = require('../../package.json').name;
 
 /** 语言 */
 const LANG = getUrlParam('lang');

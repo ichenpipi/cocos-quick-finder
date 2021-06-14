@@ -4,7 +4,7 @@ const Path = require('path');
 const ConfigManager = require('./config-manager');
 
 /** 包名 */
-const PACKAGE_NAME = 'ccc-quick-finder';
+const PACKAGE_NAME = require('./package.json').name;
 
 /**
  * i18n
@@ -162,12 +162,12 @@ function openSearchBar() {
   }
   // 创建窗口
   const winSize = [500, 600],
-    winPos = getPosition(winSize),
+    winPos = getPosition(winSize, 'top'),
     win = searchBar = new BrowserWindow({
       width: winSize[0],
       height: winSize[1],
       x: winPos[0],
-      y: winPos[1],
+      y: winPos[1] + 200,
       frame: false,
       resizable: false,
       skipTaskbar: true,
@@ -235,14 +235,14 @@ function openSettingPanel() {
   }
   // 创建窗口
   const winSize = [500, 330],
-    winPos = getPosition(winSize),
+    winPos = getPosition(winSize, 'center'),
     win = settingPanel = new BrowserWindow({
       width: winSize[0],
       height: winSize[1],
       minWidth: winSize[0],
       minHeight: winSize[1],
       x: winPos[0],
-      y: winPos[1],
+      y: winPos[1] - 100,
       frame: true,
       title: `${EXTENSION_NAME} | Cocos Creator`,
       autoHideMenuBar: true,
@@ -294,17 +294,28 @@ function closeSettingPanel() {
 /**
  * 获取窗口位置
  * @param {[number, number]} size 窗口尺寸
+ * @param {'top' | 'center'} anchor 锚点
  * @returns {[number, number]}
  */
-function getPosition(size) {
+function getPosition(size, anchor) {
   // 根据编辑器窗口的位置和尺寸来计算
   const editorWin = BrowserWindow.getFocusedWindow(),
     editorSize = editorWin.getSize(),
-    editorPos = editorWin.getPosition(),
-    // 需要注意一个问题：窗口的位置值必须是整数，否则修改不会生效
-    // 毕竟像素应该是显示器上的最低单位了，合理
-    x = Math.floor(editorPos[0] + (editorSize[0] / 2) - (size[0] / 2)),
-    y = Math.floor(editorPos[1] + 200);
+    editorPos = editorWin.getPosition();
+  // 注意：原点 (0, 0) 在屏幕左上角
+  // 另外，窗口的位置值必须是整数，否则修改无效（像素的最小粒度为 1）
+  const x = Math.floor(editorPos[0] + (editorSize[0] / 2) - (size[0] / 2));
+  let y;
+  switch (anchor || 'top') {
+    case 'top': {
+      y = Math.floor(editorPos[1]);
+      break;
+    }
+    case 'center': {
+      y = Math.floor(editorPos[1] + (editorSize[1] / 2) - (size[1] / 2));
+      break;
+    }
+  }
   return [x, y];
 }
 

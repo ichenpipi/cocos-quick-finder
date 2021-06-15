@@ -17,5 +17,7 @@ module.exports = {
     'apply': 'Apply',
     'quoteError': 'Do not use double quotes!',
     'customError': 'Please specify a hotkey!',
+    'hasNewVersion': 'New Version found! See: https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    // main
     'dataError': 'Load assets data failed, please reopen the search bar and try again!',
 };

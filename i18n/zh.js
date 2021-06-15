@@ -17,5 +17,7 @@ module.exports = {
     'apply': '应用',
     'quoteError': '请勿使用双引号！',
     'customError': '请指定一个快捷键！',
+    'hasNewVersion': '发现新版本！请看：https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    // main
     'dataError': '资源数据加载失败，请关闭搜索栏后重试！',
 };

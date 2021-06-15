@@ -122,18 +122,23 @@ function onFocusEvent(event, path) {
  */
 function onPrintEvent(event, options) {
   const { type, content } = options,
-    _content = `[${EXTENSION_NAME}] ${content}`;
+    message = `[${EXTENSION_NAME}] ${content}`;
   switch (type) {
+    default:
     case 'log': {
-      Editor.log(_content);
+      Editor.log(message);
       break;
     }
     case 'warn': {
-      Editor.warn(_content);
+      Editor.warn(message);
       break;
     }
     case 'error': {
-      Editor.error(_content);
+      Editor.error(message);
+      break;
+    }
+    case 'success': {
+      Editor.success(message);
       break;
     }
   }

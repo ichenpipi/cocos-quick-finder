@@ -2,6 +2,7 @@ const { ipcRenderer, shell } = require('electron');
 const { getUrlParam } = require('../../utils/browser-utils');
 const ConfigManager = require('../../config-manager');
 const I18n = require('../../i18n/i18n');
+const Updater = require('../../updater');
 
 /** 包名 */
 const PACKAGE_NAME = require('../../package.json').name;
@@ -145,6 +146,20 @@ const App = {
       ConfigManager.set(config);
     },
 
+    /**
+     * 检查更新
+     */
+    checkUpdate() {
+      const hasNewVersion = Updater.check();
+      if (hasNewVersion) {
+        // 打印到控制台
+        ipcRenderer.send(`${PACKAGE_NAME}:print`, {
+          type: 'success',
+          content: translate('hasNewVersion'),
+        });
+      }
+    },
+
   },
 
   /**
@@ -166,6 +181,8 @@ const App = {
         shell.openExternal(url);
       });
     });
+    // 检查更新
+    this.checkUpdate();
   },
 
   /**

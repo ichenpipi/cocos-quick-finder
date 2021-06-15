@@ -44,11 +44,19 @@ const Updater = {
     },
 
     /**
-     * 切分版本号
+     * 获取本地版本号
+     * @returns {string}
+     */
+    getLocalVersion() {
+        return require('./package.json').version;
+    },
+
+    /**
+     * 拆分版本号
      * @param {string} version 版本号文本
      * @returns {number[]}
      * @example
-     * splitVersionString('1.2.0'); // [1, 2, 0]
+     * splitVersionString('1.2.0');  // [1, 2, 0]
      */
     splitVersionString(version) {
         return (
@@ -64,10 +72,10 @@ const Updater = {
      * @param {string} b 版本 b
      * @returns {-1 | 0 | 1}
      * @example
-     * compareVersion('1.0.0', '1.0.1');   // -1
-     * compareVersion('1.1.0', '1.1.0');   // 0
-     * compareVersion('1.2.1', '1.2.0');   // 1
-     * compareVersion('1.2.0.1', '1.2.0'); // 1
+     * compareVersion('1.0.0', '1.0.1');    // -1
+     * compareVersion('1.1.0', '1.1.0');    // 0
+     * compareVersion('1.2.1', '1.2.0');    // 1
+     * compareVersion('1.2.0.1', '1.2.0');  // 1
      */
     compareVersion(a, b) {
         const acs = this.splitVersionString(a),
@@ -99,9 +107,9 @@ const Updater = {
             return false;
         }
         // 本地版本号
-        const currentVersion = require('./package.json').version;
+        const localVersion = this.getLocalVersion();
         // 对比版本号
-        const result = this.compareVersion(currentVersion, remoteVersion);
+        const result = this.compareVersion(localVersion, remoteVersion);
         return (result < 0);
     },
 

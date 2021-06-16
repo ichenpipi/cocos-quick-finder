@@ -2,6 +2,7 @@ const { BrowserWindow, ipcMain } = require('electron');
 const Fs = require('fs');
 const Path = require('path');
 const ConfigManager = require('./config-manager');
+const Updater = require('./updater');
 
 /** 包名 */
 const PACKAGE_NAME = require('./package.json').name;
@@ -36,6 +37,13 @@ module.exports = {
      */
     'open-setting-panel'() {
       openSettingPanel();
+    },
+
+    /**
+     * 检查更新
+     */
+    'check-update'() {
+      checkUpdate();
     },
 
     /**
@@ -468,4 +476,17 @@ function openPrefab(uuid) {
 function focusOnFile(uuid) {
   Editor.Ipc.sendToAll('assets:hint', uuid);
   Editor.Selection.select('asset', uuid);
+}
+
+/**
+ * 检查更新
+ */
+async function checkUpdate() {
+  const hasNewVersion = await Updater.check();
+  // 打印到控制台
+  if (hasNewVersion) {
+    Editor.success(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
+  } else {
+    Editor.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
+  }
 }

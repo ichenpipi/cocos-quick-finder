@@ -103,6 +103,14 @@ One thing you should know, not every keys/keys-combinations can be used, because
 
 
 
+## Dependencies
+
+- [electron](https://github.com/electron/electron)
+- [vue](https://github.com/vuejs/vue)
+- [node-fetch](https://github.com/node-fetch/node-fetch)
+
+
+
 ## License
 
 This project is licensed under the [MIT license](https://opensource.org/licenses/MIT).

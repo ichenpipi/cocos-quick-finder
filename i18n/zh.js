@@ -2,6 +2,11 @@ module.exports = {
     'name': 'Quick Finder',
     'search': '搜索',
     'setting': '设置',
+    'checkUpdate': '检查更新',
+    // main
+    'dataError': '资源数据加载失败，请关闭搜索栏后重试！',
+    'hasNewVersion': '发现新版本！请看：https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    'currentLatest': '当前已是最新版本！',
     // search bar
     'searchPlaceholder': '请输入文件名称...',
     'searchBtn': 'GO',
@@ -17,7 +22,4 @@ module.exports = {
     'apply': '应用',
     'quoteError': '请勿使用双引号！',
     'customError': '请指定一个快捷键！',
-    'hasNewVersion': '发现新版本！请看：https://gitee.com/ifaswind/ccc-quick-finder/releases',
-    // main
-    'dataError': '资源数据加载失败，请关闭搜索栏后重试！',
 };

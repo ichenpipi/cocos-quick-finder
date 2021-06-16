@@ -149,8 +149,8 @@ const App = {
     /**
      * 检查更新
      */
-    checkUpdate() {
-      const hasNewVersion = Updater.check();
+    async checkUpdate() {
+      const hasNewVersion = await Updater.check();
       if (hasNewVersion) {
         // 打印到控制台
         ipcRenderer.send(`${PACKAGE_NAME}:print`, {

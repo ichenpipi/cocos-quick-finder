@@ -2,6 +2,11 @@ module.exports = {
     'name': 'Quick Finder',
     'search': 'Search',
     'setting': 'Setting',
+    'checkUpdate': 'Check Update',
+    // main
+    'dataError': 'Load assets data failed, please reopen the search bar and try again!',
+    'hasNewVersion': 'New version found! See: https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    'currentLatest': 'Latest now!',
     // search bar
     'searchPlaceholder': 'Enter file name...',
     'searchBtn': 'GO',
@@ -17,7 +22,4 @@ module.exports = {
     'apply': 'Apply',
     'quoteError': 'Do not use double quotes!',
     'customError': 'Please specify a hotkey!',
-    'hasNewVersion': 'New Version found! See: https://gitee.com/ifaswind/ccc-quick-finder/releases',
-    // main
-    'dataError': 'Load assets data failed, please reopen the search bar and try again!',
 };

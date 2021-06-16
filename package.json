@@ -23,6 +23,10 @@
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.setting": {
       "message": "ccc-quick-finder:open-setting-panel",
       "icon": "/images/setting.png"
+    },
+    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
+      "message": "ccc-quick-finder:check-update",
+      "icon": "/images/update.png"
     }
   },
   "panel.setting": {

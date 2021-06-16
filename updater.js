@@ -1,3 +1,5 @@
+const fetch = require('./lib/node-fetch');
+
 /**
  * 更新器
  */
@@ -62,7 +64,7 @@ const Updater = {
         return (
             version.replace(/-/g, '.')
                 .split('.')
-                .map(v => parseInt(v) || 0)
+                .map(v => (parseInt(v) || 0))
         );
     },
 

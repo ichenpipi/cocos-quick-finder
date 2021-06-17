@@ -100,7 +100,12 @@ function onMatchKeywordEvent(event, keyword) {
   // 匹配结果
   const results = getMatchFiles(keyword);
   // 返回结果给渲染进程
-  event.reply(`${PACKAGE_NAME}:match-keyword-reply`, results);
+  if (event.reply) {
+    event.reply(`${PACKAGE_NAME}:match-keyword-reply`, results);
+  } else {
+    // 兼容低版本 electron
+    event.sender.send(`${PACKAGE_NAME}:match-keyword-reply`, results);
+  }
 }
 
 /**

@@ -29,7 +29,16 @@
                     <span class="tooltip">{{ customTooltipLabel }}</span>
                 </div>
                 <div class="content">
-                    <input v-model="custom" :placeholder="customPlaceholderLabel">
+                    <input v-model="custom" :placeholder="customPlaceholderLabel" />
+                </div>
+            </div>
+            <div class="property">
+                <div class="label">
+                    <span class="text">{{ '自动检查更新' }}</span>
+                    <span class="tooltip">{{ '编辑器启动时自动检查是否有更新' }}</span>
+                </div>
+                <div class="content">
+                    <input type="checkbox" v-model="autoCheckUpdate" />
                 </div>
             </div>
             <div class="tip">
@@ -45,7 +54,7 @@
         </div>
     </div>
     <!-- 脚本 -->
-    <script src="../../lib/vue.global.prod.js"></script>
+    <script src="../../../lib/vue.global.prod.js"></script>
     <script src="index.js"></script>
 </body>
 

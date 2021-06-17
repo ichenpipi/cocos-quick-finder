@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://gitee.com/ifaswind/ccc-quick-finder"
   },
-  "main": "main.js",
+  "main": "src/main.js",
   "main-menu": {
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
       "message": "ccc-quick-finder:open-search-panel",
@@ -29,17 +29,10 @@
       "icon": "/images/update.png"
     }
   },
-  "panel.setting": {
-    "main": "panel.setting/index.js",
-    "type": "fixed-size",
-    "title": "i18n:ccc-quick-finder.name",
-    "width": 550,
-    "height": 343
-  },
   "reload": {
     "renderer": [],
     "ignore": [
-      "panels/**/*",
+      "src/panels/**/*",
       "CHANGELOG.md",
       "README.md",
       "README.en.md"

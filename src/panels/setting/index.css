@@ -70,7 +70,7 @@ body {
 }
 
 .property:focus-within > .label > .text {
-  color: rgb(253, 148, 43);
+  color: #fd942b;
 }
 
 /* tooltip */
@@ -134,13 +134,13 @@ body {
 }
 
 .property > .content > *:focus {
-  border-color: rgb(253, 148, 43);
+  border-color: #fd942b;
 }
 
 select {
   background-color: #2e2e2e;
   padding: 0 5px;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #171717;
   border-radius: 100px;
   outline: none;
   font-size: 12px;
@@ -148,18 +148,57 @@ select {
   cursor: pointer;
 }
 
+select:hover {
+  border-color: #888888;
+}
+
 input {
   background-color: #262626;
   padding: 0 5px;
-  border: 1px solid #262626;
+  border: 1px solid #171717;
   border-radius: 3px;
-  color: rgb(253, 148, 43);
+  color: #fd942b;
   outline: none;
 }
 
 input::placeholder {
   font-size: 11px;
   font-style: italic;
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  background-image: none;
+  background-color: #262626;
+  border: 1px solid #171717;
+  border-radius: 3px;
+  position: relative !important;
+  flex: 0 !important;
+  margin: 0;
+  padding-left: 0;
+  color: #fd942b;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type='checkbox']:checked::after {
+  width: 12px;
+  height: 12px;
+  content: '';
+  display: inline-block;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAArUlEQVQoU5WSvQ3CMBBG7zNMg2GMUKSHGaLAOEFihtBTsYXjlKxAmwL5kO3EMfkRwaX1nu6dZdCfB0t5LnYpzuq+SDCXbcnMqQH2P4UWPtgSEGkn8FVuyIgGuXrGiSN4TUdYmN9UMnEjxCpBrl5WmoQzXcMUsmIi6UYCD3GqkjnYMf2EIN2YuW+2GZmuu9Swg8/yUlhwALf3HognudeYgL+EWJqDR0Inxc3Dn/ABm5JqgPxa2tYAAAAASUVORK5CYII=);
+  background-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+input:hover {
+  border-color: #888888;
 }
 
 .tip {
@@ -215,7 +254,7 @@ a:hover {
 .apply-btn:active {
   background-image: none;
   background-color: #2e6da2;
-  border-color: rgb(253, 148, 43);
+  border-color: #fd942b;
   color: #cdcdcd;
   box-shadow: 1px 1px 10px #262626 inset;
 }

@@ -1,9 +1,9 @@
 const { ipcRenderer } = require('electron');
-const { getUrlParam } = require('../../utils/browser-utils');
-const I18n = require('../../i18n/i18n');
+const { getUrlParam } = require('../../../utils/browser-utils');
+const I18n = require('../../i18n');
 
 /** 包名 */
-const PACKAGE_NAME = require('../../package.json').name;
+const PACKAGE_NAME = require('../../../package.json').name;
 
 /** 语言 */
 const LANG = getUrlParam('lang');
@@ -243,7 +243,7 @@ const App = {
      */
     getIcon(extname) {
       const iconName = iconMap[extname] || 'asset';
-      return `../../images/assets/${iconName}.png`;
+      return `../../../images/assets/${iconName}.png`;
     },
 
   },

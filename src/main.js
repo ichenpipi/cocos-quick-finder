@@ -5,7 +5,7 @@ const ConfigManager = require('./config-manager');
 const Updater = require('./updater');
 
 /** 包名 */
-const PACKAGE_NAME = require('./package.json').name;
+const PACKAGE_NAME = require('../package.json').name;
 
 /**
  * i18n
@@ -46,25 +46,6 @@ module.exports = {
       checkUpdate();
     },
 
-    /**
-     * 读取配置
-     * @param {any} event 
-     */
-    'read-config'(event) {
-      const config = ConfigManager.read();
-      event.reply(null, config);
-    },
-
-    /**
-     * 保存配置
-     * @param {any} event 
-     * @param {any} config 
-     */
-    'save-config'(event, config) {
-      ConfigManager.save(config);
-      event.reply(null, true);
-    },
-
   },
 
   /**
@@ -93,8 +74,8 @@ module.exports = {
 
 /**
  * （渲染进程）关键词匹配事件回调
- * @param {*} event 
- * @param {string} keyword 
+ * @param {Electron.IpcMainEvent} event 
+ * @param {string} keyword 关键词
  */
 function onMatchKeywordEvent(event, keyword) {
   // 匹配结果
@@ -110,7 +91,7 @@ function onMatchKeywordEvent(event, keyword) {
 
 /**
  * （渲染进程）打开文件事件回调
- * @param {*} event 
+ * @param {Electron.IpcMainEvent} event 
  * @param {string} path 路径
  */
 function onOpenEvent(event, path) {
@@ -119,7 +100,7 @@ function onOpenEvent(event, path) {
 
 /**
  * （渲染进程）聚焦文件事件回调
- * @param {*} event 
+ * @param {Electron.IpcMainEvent} event 
  * @param {string} path 路径
  */
 function onFocusEvent(event, path) {
@@ -130,7 +111,7 @@ function onFocusEvent(event, path) {
 
 /**
  * （渲染进程）打印事件回调
- * @param {*} event 
+ * @param {Electron.IpcMainEvent} event 
  * @param {{ type: string, content: string }} options 选项
  */
 function onPrintEvent(event, options) {
@@ -239,13 +220,16 @@ function closeSearchBar() {
   searchBar = null;
 }
 
+/**
+ * 设置面板实例
+ * @type {BrowserWindow}
+ */
 let settingPanel = null;
 
 /**
  * 打开设置面板
  */
 function openSettingPanel() {
-  // Editor.Panel.open(`${PACKAGE_NAME}.setting`);
   // 已打开则关闭
   if (settingPanel) {
     closeSettingPanel();
@@ -287,11 +271,11 @@ function openSettingPanel() {
   // 就绪后展示（避免闪烁）
   win.on('ready-to-show', () => win.show());
   // 失焦后（自动关闭）
-  win.on('blur', () => closeSettingPanel());
+  // win.on('blur', () => closeSettingPanel());
   // 关闭后（移除引用）
   win.on('closed', () => (settingPanel = null));
   // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
-  // win.webContents.openDevTools({ mode: 'detach' });
+  win.webContents.openDevTools({ mode: 'detach' });
 }
 
 /**

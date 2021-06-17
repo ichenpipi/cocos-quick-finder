@@ -5,7 +5,7 @@ const Fs = require('fs');
 const PACKAGE_NAME = 'ccc-quick-finder';
 
 /** package.json 的路径 */
-const packageFilePath = Path.join(__dirname, 'package.json');
+const packageFilePath = Path.join(__dirname, '../package.json');
 
 /** package.json 中的菜单项 key */
 const menuItemKey = `i18n:MAIN_MENU.package.title/i18n:${PACKAGE_NAME}.name/i18n:${PACKAGE_NAME}.search`;

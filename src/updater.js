@@ -1,4 +1,4 @@
-const fetch = require('./lib/node-fetch');
+const fetch = require('../lib/node-fetch');
 
 /**
  * 更新器
@@ -50,7 +50,7 @@ const Updater = {
      * @returns {string}
      */
     getLocalVersion() {
-        return require('./package.json').version;
+        return require('../package.json').version;
     },
 
     /**

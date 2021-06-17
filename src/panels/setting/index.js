@@ -1,11 +1,12 @@
 const { ipcRenderer, shell } = require('electron');
-const { getUrlParam } = require('../../utils/browser-utils');
+const { getUrlParam } = require('../../../utils/browser-utils');
 const ConfigManager = require('../../config-manager');
-const I18n = require('../../i18n/i18n');
+const I18n = require('../../i18n');
 const Updater = require('../../updater');
+const Download = require('../../download');
 
 /** 包名 */
-const PACKAGE_NAME = require('../../package.json').name;
+const PACKAGE_NAME = require('../../../package.json').name;
 
 /** 语言 */
 const LANG = getUrlParam('lang');
@@ -52,6 +53,8 @@ const App = {
       select: 'F1',
       // 自定义
       custom: '',
+      // 自动检查更新
+      autoCheckUpdate: false,
     };
   },
 

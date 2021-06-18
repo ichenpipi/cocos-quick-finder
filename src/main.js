@@ -43,7 +43,7 @@ module.exports = {
      * 检查更新
      */
     'check-update'() {
-      checkUpdate();
+      checkUpdate(true);
     },
 
   },
@@ -57,6 +57,11 @@ module.exports = {
     ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
     ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
     ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
+    // 自动检查更新
+    const config = ConfigManager.get();
+    if (config.autoCheckUpdate) {
+      checkUpdate(false);
+    }
   },
 
   /**
@@ -236,7 +241,7 @@ function openSettingPanel() {
     return;
   }
   // 创建窗口
-  const winSize = [500, 330],
+  const winSize = [500, 355],
     winPos = getPosition(winSize, 'center'),
     win = settingPanel = new BrowserWindow({
       width: winSize[0],
@@ -271,11 +276,11 @@ function openSettingPanel() {
   // 就绪后展示（避免闪烁）
   win.on('ready-to-show', () => win.show());
   // 失焦后（自动关闭）
-  // win.on('blur', () => closeSettingPanel());
+  win.on('blur', () => closeSettingPanel());
   // 关闭后（移除引用）
   win.on('closed', () => (settingPanel = null));
   // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
-  win.webContents.openDevTools({ mode: 'detach' });
+  // win.webContents.openDevTools({ mode: 'detach' });
 }
 
 /**
@@ -469,13 +474,14 @@ function focusOnFile(uuid) {
 
 /**
  * 检查更新
+ * @param {boolean} logWhatever 无论有无更新都打印提示
  */
-async function checkUpdate() {
+async function checkUpdate(logWhatever) {
   const hasNewVersion = await Updater.check();
   // 打印到控制台
   if (hasNewVersion) {
     Editor.success(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
-  } else {
+  } else if (logWhatever) {
     Editor.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
   }
 }

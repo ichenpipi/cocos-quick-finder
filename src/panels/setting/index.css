@@ -11,6 +11,7 @@ body {
   height: 100%;
 }
 
+/* 标题 */
 .title {
   height: 24px;
   font-size: 18px;
@@ -18,6 +19,7 @@ body {
   margin: 15px 0;
 }
 
+/* 容器 */
 .container {
   border: 1px solid #666;
   border-radius: 3px;
@@ -40,6 +42,7 @@ body {
   margin-bottom: 0;
 }
 
+/* 属性 */
 .property {
   width: 100%;
   height: 23px;
@@ -51,9 +54,11 @@ body {
   justify-content: flex-start;
 }
 
+/* 属性标签 */
 .property > .label {
   width: 35%;
   min-width: 70px;
+  position: relative;
   margin-left: 5px;
   font-size: 12px;
   white-space: nowrap;
@@ -79,9 +84,9 @@ body {
   padding: 5px 8px;
   border: 1px solid #646464;
   border-radius: 4px;
-  position: relative;
-  top: -26px;
-  left: -40px;
+  position: absolute;
+  top: -34px;
+  left: -5px;
   visibility: hidden;
   text-align: center;
   z-index: 2;
@@ -117,6 +122,7 @@ body {
   visibility: visible;
 }
 
+/* 属性内容 */
 .property > .content {
   display: flex;
   flex: 1;
@@ -137,6 +143,7 @@ body {
   border-color: #fd942b;
 }
 
+/* 下拉选择器 */
 select {
   background-color: #2e2e2e;
   padding: 0 5px;
@@ -152,6 +159,7 @@ select:hover {
   border-color: #888888;
 }
 
+/* 输入框 */
 input {
   background-color: #262626;
   padding: 0 5px;
@@ -166,6 +174,7 @@ input::placeholder {
   font-style: italic;
 }
 
+/* 复选框 */
 input[type='checkbox'] {
   appearance: none;
   width: 16px !important;
@@ -184,6 +193,7 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
+/* 复选框-勾选 */
 input[type='checkbox']:checked::after {
   width: 12px;
   height: 12px;
@@ -201,6 +211,7 @@ input:hover {
   border-color: #888888;
 }
 
+/* 提示 */
 .tip {
   width: 100%;
   height: 50px;
@@ -215,6 +226,7 @@ input:hover {
   white-space: normal;
 }
 
+/* 超链接 */
 a {
   color: #fd942b;
   text-decoration: none;
@@ -224,6 +236,7 @@ a:hover {
   text-decoration: underline;
 }
 
+/* 分割线 */
 .line {
   width: 100%;
   height: 1px;
@@ -231,6 +244,7 @@ a:hover {
   margin: 5px 0;
 }
 
+/* 应用按钮 */
 .apply-btn {
   min-width: 20px;
   height: 33px;
@@ -257,4 +271,8 @@ a:hover {
   border-color: #fd942b;
   color: #cdcdcd;
   box-shadow: 1px 1px 10px #262626 inset;
+}
+
+[v-cloak] {
+  display: none;
 }

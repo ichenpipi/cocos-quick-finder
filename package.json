@@ -33,6 +33,7 @@
     "renderer": [],
     "ignore": [
       "src/panels/**/*",
+      "config.json",
       "CHANGELOG.md",
       "README.md",
       "README.en.md"

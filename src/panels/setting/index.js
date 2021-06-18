@@ -3,7 +3,6 @@ const { getUrlParam } = require('../../../utils/browser-utils');
 const ConfigManager = require('../../config-manager');
 const I18n = require('../../i18n');
 const Updater = require('../../updater');
-const Download = require('../../download');
 
 /** 包名 */
 const PACKAGE_NAME = require('../../../package.json').name;
@@ -28,18 +27,20 @@ const App = {
     return {
       // 多语言文本
       titleLabel: translate('setting'),
-      selectLabel: translate('select'),
-      selectTooltipLabel: translate('selectTooltip'),
-      customLabel: translate('custom'),
-      customPlaceholderLabel: translate('customPlaceholder'),
-      customTooltipLabel: translate('customTooltip'),
+      selectLabel: translate('selectKey'),
+      selectTooltipLabel: translate('selectKeyTooltip'),
+      customLabel: translate('customKey'),
+      customPlaceholderLabel: translate('customKeyPlaceholder'),
+      customTooltipLabel: translate('customKeyTooltip'),
+      autoCheckLabel: translate('autoCheck'),
+      autoCheckTooltipLabel: translate('autoCheckTooltip'),
       referenceLabel: translate('reference'),
       acceleratorLabel: translate('accelerator'),
       repositoryLabel: translate('repository'),
       applyLabel: translate('apply'),
       // 预设快捷键
       presets: [
-        { key: 'custom', name: translate('custom') },
+        { key: 'custom', name: translate('customKey') },
         { key: 'F1', name: 'F1' },
         { key: 'F3', name: 'F3' },
         { key: 'F4', name: 'F4' },
@@ -50,9 +51,9 @@ const App = {
         { key: 'CmdOrCtrl+Shift+F', name: 'Cmd/Ctrl + Shift + F' },
       ],
       // 选择
-      select: 'F1',
+      selectKey: 'F1',
       // 自定义
-      custom: '',
+      customKey: '',
       // 自动检查更新
       autoCheckUpdate: false,
     };
@@ -66,18 +67,18 @@ const App = {
     /**
      * 选择快捷键
      */
-    select(value) {
+    selectKey(value) {
       if (value !== 'custom') {
-        this.custom = '';
+        this.customKey = '';
       }
     },
 
     /**
      * 自定义
      */
-    custom(value) {
-      if (value !== '' && this.select !== 'custom') {
-        this.select = 'custom';
+    customKey(value) {
+      if (value !== '' && this.selectKey !== 'custom') {
+        this.selectKey = 'custom';
       }
     },
 
@@ -103,49 +104,55 @@ const App = {
     getConfig() {
       const config = ConfigManager.get();
       if (!config) return;
+      // 自动检查更新
+      this.autoCheckUpdate = config.autoCheckUpdate;
+      // 快捷键
       const presets = this.presets,
         hotkey = config.hotkey;
       // 预设按键
       for (let i = 0, l = presets.length; i < l; i++) {
         if (presets[i].key === hotkey) {
-          this.select = hotkey;
-          this.custom = '';
+          this.selectKey = hotkey;
+          this.customKey = '';
           return;
         }
       }
       // 自定义按键
-      this.select = 'custom';
-      this.custom = hotkey;
+      this.selectKey = 'custom';
+      this.customKey = hotkey;
     },
 
     /**
      * 保存配置
      */
     setConfig() {
-      const config = Object.create(null);
-      if (this.select === 'custom') {
-        const custom = this.custom;
+      const config = {
+        autoCheckUpdate: this.autoCheckUpdate,
+      };
+      if (this.selectKey === 'custom') {
+        const customKey = this.customKey;
         // 输入是否有效
-        if (custom === '') {
+        if (customKey === '') {
           ipcRenderer.send(`${PACKAGE_NAME}:print`, {
             type: 'warn',
-            content: translate('customError'),
+            content: translate('customKeyError'),
           });
           return;
         }
         // 不可以使用双引号（避免 json 值中出现双引号而解析错误，导致插件加载失败）
-        if (custom.includes('"')) {
-          this.custom = this.custom.replace(/\"/g, '');
+        if (customKey.includes('"')) {
+          this.customKey = this.customKey.replace(/\"/g, '');
           ipcRenderer.send(`${PACKAGE_NAME}:print`, {
             type: 'warn',
             content: translate('quoteError'),
           });
           return;
         }
-        config.hotkey = custom;
+        config.hotkey = customKey;
       } else {
-        config.hotkey = this.select;
+        config.hotkey = this.selectKey;
       }
+      // 保存到本地
       ConfigManager.set(config);
     },
 
@@ -169,10 +176,6 @@ const App = {
    * 生命周期：实例被挂载
    */
   mounted() {
-    // 下一帧
-    this.$nextTick(() => {
-
-    });
     // 获取配置
     this.getConfig();
     // 覆盖 a 标签点击回调（使用默认浏览器打开网页）

@@ -26,6 +26,6 @@ const I18n = {
         return this[lang] ? this[lang][key] : undefined;
     }
 
-}
+};
 
 module.exports = I18n;

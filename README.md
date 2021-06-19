@@ -6,6 +6,10 @@
 
 **按下快捷键打开搜索栏，输入关键字即可快速定位项目中的文件，并且可以快速打开场景和预制体。**
 
+> ⚠ 注意
+>
+> 当前分支为 **Cocos Creator 2.x** 版本，**Cocos Creator 3.x** 版本请切换到 `ccc-v3` 分支，点击[这里](https://gitee.com/ifaswind/ccc-quick-finder/tree/ccc-v3/)立即切换。
+
 
 
 ## 开源

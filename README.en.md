@@ -6,6 +6,10 @@
 
 **Press the hotkey to open the search bar, enter the file name then you can locate the file immediately, for scenes or prefabs you can open it directly.**
 
+> ⚠ Attention
+>
+> Current branch is for **Cocos Creator 2.x**, if you're looking for **Cocos Creator 3.x** version ,please switch to branch `ccc-v3`, Click [here](https://gitee.com/ifaswind/ccc-quick-finder/tree/ccc-v3/) to switch branch immediately.
+
 
 
 ## Open Source

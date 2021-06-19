@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const Path = require('path');
 const { getUrlParam } = require('../../../utils/browser-utils');
 const I18n = require('../../i18n');
 
@@ -254,7 +255,7 @@ const App = {
      * @returns {string}
      */
     getPath(path) {
-      const start = path.indexOf('/assets');
+      const start = path.indexOf(`${Path.sep}assets`);
       return path.slice(start + 1);
     },
 

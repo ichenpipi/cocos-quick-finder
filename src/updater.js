@@ -87,11 +87,11 @@ const Updater = {
             const ac = acs[i],
                 bc = bcs[i];
             // 前者缺少分量或前者小于后者
-            if (!ac || ac < bc) {
+            if (ac == undefined || ac < bc) {
                 return -1;
             }
             // 后者缺少分量或前者大于后者
-            if (!bc || ac > bc) {
+            if (bc == undefined || ac > bc) {
                 return 1;
             }
         }

@@ -255,7 +255,7 @@ const App = {
      */
     getPath(path) {
       const start = path.indexOf('/assets');
-      return ('...' + path.slice(start));
+      return path.slice(start + 1);
     },
 
   },

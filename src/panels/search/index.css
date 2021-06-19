@@ -183,6 +183,12 @@ body {
 .item .detail {
   display: none;
   height: 18px;
+  color: #bdbdbd;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: rtl;
 }
 
 /* 条目选中或虚指时 */
@@ -193,13 +199,8 @@ body {
 
 /* 条目-路径 */
 .detail .path {
-  display: block;
-  line-height: 18px;
   font-size: 13px;
-  color: #bdbdbd;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  direction: ltr;
 }
 
 [v-cloak] {

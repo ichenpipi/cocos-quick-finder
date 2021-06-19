@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <!-- 样式 -->
     <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- 脚本 -->
+    <script type="text/javascript" src="../../../lib/vue.global.prod.js" defer></script>
+    <script type="text/javascript" src="index.js" defer></script>
 </head>
 
 <body>
-    <!-- 页面 -->
     <div id="app" v-cloak>
         <div class="title">{{ titleLabel }}</div>
         <div class="container">
@@ -59,9 +61,6 @@
             <button class="apply-btn" @click="onApplyBtnClick">{{ applyLabel }}</button>
         </div>
     </div>
-    <!-- 脚本 -->
-    <script type="text/javascript" src="../../../lib/vue.global.prod.js"></script>
-    <script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>

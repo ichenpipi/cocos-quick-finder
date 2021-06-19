@@ -130,8 +130,10 @@ const App = {
       this.curItem = this.results[this.curIndex];
       this.keyword = this.curItem.name;
       // 只有当目标元素不在可视区域内才滚动
-      const id = `item-${this.curIndex}`;
-      document.getElementById(id).scrollIntoViewIfNeeded(false);
+      this.$nextTick(() => {
+        const id = `item-${this.curIndex}`;
+        document.getElementById(id).scrollIntoViewIfNeeded(false);
+      });
     },
 
     /**
@@ -244,6 +246,16 @@ const App = {
     getIcon(extname) {
       const iconName = iconMap[extname] || 'asset';
       return `../../../images/assets/${iconName}.png`;
+    },
+
+    /**
+     * 处理路径
+     * @param {string} path 完成路径
+     * @returns {string}
+     */
+    getPath(path) {
+      const start = path.indexOf('/assets');
+      return ('...' + path.slice(start));
     },
 
   },

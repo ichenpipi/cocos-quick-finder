@@ -6,7 +6,7 @@ module.exports = {
     // main
     'dataError': 'Load assets data failed, please reopen the search bar and try again!',
     'hasNewVersion': 'New version found! See: https://gitee.com/ifaswind/ccc-quick-finder/releases',
-    'currentLatest': 'Latest now!',
+    'currentLatest': 'Currently the latest version!',
     // search bar
     'searchPlaceholder': 'Enter file name...',
     'searchBtn': 'GO',

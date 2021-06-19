@@ -105,6 +105,7 @@ One thing you should know, not every keys/keys-combinations can be used, because
 
 ## Dependencies
 
+- [cocos-creator](https://github.com/cocos-creator)
 - [electron](https://github.com/electron/electron)
 - [vue](https://github.com/vuejs/vue)
 - [node-fetch](https://github.com/node-fetch/node-fetch)

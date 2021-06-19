@@ -5,18 +5,20 @@
     <meta charset="utf-8">
     <!-- 样式 -->
     <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- 脚本 -->
+    <script type="text/javascript" src="../../../lib/vue.global.prod.js" defer></script>
+    <script type="text/javascript" src="index.js" defer></script>
 </head>
 
 <body>
-    <!-- 页面 -->
     <div id="app" v-cloak>
         <!-- 搜索 -->
         <div class="search">
             <!-- 输入框 -->
-            <input class="input" ref="input" type="text" v-model="keyword" :placeholder="placeholderLabel"
+            <input ref="input" class="input" type="text" v-model="keyword" :placeholder="placeholderLabel"
                 @input="onInputChange" @keydown.enter="onEnterBtnClick" @keydown.up="onUpBtnClick"
                 @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick" @keydown.right="onRightBtnClick"
-                spellcheck="false" autofocus></input>
+                spellcheck="false" autofocus />
             <!-- 按钮 -->
             <button class="btn" v-text="buttonLabel" @click="onEnterBtnClick"></button>
         </div>
@@ -24,16 +26,18 @@
         <div class="result" v-if="results.length > 0">
             <ul class="list">
                 <li class="item" v-for="(item, index) in results" :key="index" :id="'item-' + index"
-                    :class="{ 'item-selected': (index === curIndex) }" @click="onResultClick(item, index)" v-cloak>
-                    <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
-                    <span class="name">{{ item.name }}</span>
+                    @click="onResultClick(item, index)" :selected="index === curIndex">
+                    <div class="info">
+                        <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
+                        <span class="name">{{ item.name }}</span>
+                    </div>
+                    <div class="detail">
+                        <span class="path">{{ getPath(item.path) }}</span>
+                    </div>
                 </li>
             </ul>
         </div>
     </div>
-    <!-- 脚本 -->
-    <script type="text/javascript" src="../../../lib/vue.global.prod.js"></script>
-    <script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>

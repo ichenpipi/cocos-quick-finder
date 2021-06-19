@@ -1,5 +1,6 @@
 {
   "name": "ccc-quick-finder",
+  "package_version": 2,
   "version": "1.2.1.20210620",
   "description": "快速搜索定位文件，可以直接打开场景和预制体",
   "author": "ifaswind（陈皮皮）",
@@ -14,29 +15,56 @@
     "url": "https://gitee.com/ifaswind/ccc-quick-finder"
   },
   "main": "src/main.js",
-  "main-menu": {
-    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
-      "message": "ccc-quick-finder:open-search-panel",
-      "icon": "/images/search.png",
-      "accelerator": "F1"
+  "contributions": {
+    "menu": [
+      {
+        "path": "i18n:menu.extension/i18n:ccc-quick-finder.name",
+        "label": "i18n:ccc-quick-finder.search",
+        "icon": "/images/search.png",
+        "message": "open-search-panel"
+      },
+      {
+        "path": "i18n:menu.extension/i18n:ccc-quick-finder.name",
+        "label": "i18n:ccc-quick-finder.setting",
+        "icon": "/images/setting.png",
+        "message": "open-setting-panel"
+      },
+      {
+        "path": "i18n:menu.extension/i18n:ccc-quick-finder.name",
+        "label": "i18n:ccc-quick-finder.checkUpdate",
+        "icon": "/images/update.png",
+        "message": "check-update"
+      }
+    ],
+    "messages": {
+      "open-search-panel": {
+        "public": true,
+        "description": "打开文件搜索栏",
+        "methods": [
+          "openSearchPanel"
+        ]
+      },
+      "open-setting-panel": {
+        "public": true,
+        "description": "打开设置面板",
+        "methods": [
+          "openSettingPanel"
+        ]
+      },
+      "check-update": {
+        "public": true,
+        "description": "检查扩展是否有更新",
+        "methods": [
+          "checkUpdate"
+        ]
+      }
     },
-    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.setting": {
-      "message": "ccc-quick-finder:open-setting-panel",
-      "icon": "/images/setting.png"
-    },
-    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
-      "message": "ccc-quick-finder:check-update",
-      "icon": "/images/update.png"
-    }
-  },
-  "reload": {
-    "renderer": [],
-    "ignore": [
-      "src/panels/**/*",
-      "config.json",
-      "CHANGELOG.md",
-      "README.md",
-      "README.en.md"
+    "shortcuts": [
+      {
+        "message": "open-search-panel",
+        "win": "F1",
+        "mac": "F1"
+      }
     ]
   }
 }

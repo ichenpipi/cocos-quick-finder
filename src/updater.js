@@ -16,7 +16,7 @@ const Updater = {
      * @returns {Promise<object>}
      */
     async getRemotePackageJson() {
-        const packageJsonUrl = `${this.remoteUrl}/raw/master/package.json`;
+        const packageJsonUrl = `${this.remoteUrl}/raw/ccc-v3/package.json`;
         // 发起网络请求
         const response = await fetch(packageJsonUrl, {
             method: 'GET',

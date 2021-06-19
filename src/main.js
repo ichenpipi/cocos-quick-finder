@@ -12,69 +12,64 @@ const PACKAGE_NAME = require('../package.json').name;
  * @param {string} key
  * @returns {string}
  */
-const translate = (key) => Editor.T(`${PACKAGE_NAME}.${key}`);
+const translate = (key) => Editor.I18n.t(`${PACKAGE_NAME}.${key}`);
 
-/** 扩展名 */
+/** 扩展名称 */
 const EXTENSION_NAME = translate('name');
 
-module.exports = {
+/**
+ * 函数
+ */
+exports.methods = {
 
   /**
-   * 扩展消息
-   * @type {{ [key: string]: Function }}
+   * 打开搜索面板
    */
-  messages: {
-
-    /**
-     * 打开搜索面板
-     */
-    'open-search-panel'() {
-      openSearchBar();
-    },
-
-    /**
-     * 打开设置面板
-     */
-    'open-setting-panel'() {
-      openSettingPanel();
-    },
-
-    /**
-     * 检查更新
-     */
-    'check-update'() {
-      checkUpdate(true);
-    },
-
+  openSearchPanel() {
+    openSearchBar();
   },
 
   /**
-   * 生命周期：加载
+   * 打开设置面板
    */
-  load() {
-    // 监听事件
-    ipcMain.on(`${PACKAGE_NAME}:match-keyword`, onMatchKeywordEvent);
-    ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
-    ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
-    ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
-    // 自动检查更新
-    const config = ConfigManager.get();
-    if (config.autoCheckUpdate) {
-      checkUpdate(false);
-    }
+  openSettingPanel() {
+    openSettingPanel();
   },
 
   /**
-   * 生命周期：卸载
+   * 检查更新
    */
-  unload() {
-    // 取消事件监听
-    ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
-    ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
-    ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
-    ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
+  checkUpdate() {
+    checkUpdate(true);
   },
 
+};
+
+/**
+ * 生命周期：加载
+ */
+exports.load = function () {
+  // 监听事件
+  ipcMain.on(`${PACKAGE_NAME}:match-keyword`, onMatchKeywordEvent);
+  ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
+  ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
+  ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
+  // 自动检查更新
+  const config = ConfigManager.get();
+  if (config.autoCheckUpdate) {
+    checkUpdate(false);
+  }
+}
+
+/**
+ * 生命周期：卸载
+ */
+exports.unload = function () {
+  // 取消事件监听
+  ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
+  ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
+  ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
+  ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
 }
 
 /**
@@ -86,12 +81,7 @@ function onMatchKeywordEvent(event, keyword) {
   // 匹配结果
   const results = getMatchFiles(keyword);
   // 返回结果给渲染进程
-  if (event.reply) {
-    event.reply(`${PACKAGE_NAME}:match-keyword-reply`, results);
-  } else {
-    // 兼容低版本 electron
-    event.sender.send(`${PACKAGE_NAME}:match-keyword-reply`, results);
-  }
+  event.reply(`${PACKAGE_NAME}:match-keyword-reply`, results);
 }
 
 /**
@@ -108,9 +98,9 @@ function onOpenEvent(event, path) {
  * @param {Electron.IpcMainEvent} event 
  * @param {string} path 路径
  */
-function onFocusEvent(event, path) {
+async function onFocusEvent(event, path) {
   // 在资源管理器中显示并选中文件
-  const uuid = Editor.assetdb.fspathToUuid(path);
+  const uuid = await Editor.Message.request('asset-db', 'query-uuid', path);
   focusOnFile(uuid);
 }
 
@@ -125,19 +115,19 @@ function onPrintEvent(event, options) {
   switch (type) {
     default:
     case 'log': {
-      Editor.log(message);
+      console.log(message);
       break;
     }
     case 'warn': {
-      Editor.warn(message);
+      console.warn(message);
       break;
     }
     case 'error': {
-      Editor.error(message);
+      console.error(message);
       break;
     }
     case 'success': {
-      Editor.success(message);
+      console.info(message);
       break;
     }
   }
@@ -186,7 +176,7 @@ function openSearchBar() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.lang;
+  const lang = Editor.I18n.getLanguage();
   win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${lang}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
@@ -215,9 +205,7 @@ function closeSearchBar() {
   }
   // 移除缓存
   cache = null;
-  // 先隐藏再关闭
-  // 在 2.4.5 版本中，扩展如果安装在局部，关闭搜索栏会引发编辑器闪退
-  // 原因未知，修改为先隐藏再关闭就没问题了（离谱）
+  // 隐藏
   searchBar.hide();
   // 关闭
   searchBar.close();
@@ -265,7 +253,7 @@ function openSettingPanel() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.lang;
+  const lang = Editor.I18n.getLanguage();
   win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${lang}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
@@ -351,7 +339,7 @@ function map(path, handler) {
  * @returns {{ name: string, path: string, extname: string }[]}
  */
 function getAllFiles() {
-  const assetsPath = Editor.url('db://assets/'),
+  const assetsPath = Path.join(Editor.Project.path, 'assets/'),
     results = [];
   const handler = (path, stat) => {
     // 过滤
@@ -380,7 +368,7 @@ function filter(path) {
     return false;
   }
   // 只要场景和预制体
-  // if (extname !== '.fire' && extname !== '.prefab') {
+  // if (extname !== '.scene' && extname !== '.prefab') {
   //   return false;
   // }
   // 可用
@@ -415,7 +403,7 @@ function getMatchFiles(keyword) {
     // 排序（similarity 越小，匹配的长度越短，匹配度越高）
     results.sort((a, b) => a.similarity - b.similarity);
   } else {
-    Editor.warn(`[${EXTENSION_NAME}]`, translate('dataError'));
+    console.warn(`[${EXTENSION_NAME}]`, translate('dataError'));
   }
   // Done
   return results;
@@ -425,12 +413,12 @@ function getMatchFiles(keyword) {
  * 打开文件
  * @param {string} path 路径
  */
-function openFile(path) {
+async function openFile(path) {
   const extname = Path.extname(path),
-    uuid = Editor.assetdb.fspathToUuid(path);
+    uuid = await Editor.Message.request('asset-db', 'query-uuid', path);
   // 文件格式
   switch (extname) {
-    case '.fire':
+    case '.scene':
       // 打开场景
       openScene(uuid);
       break;
@@ -452,7 +440,7 @@ function openFile(path) {
  * @param {string} uuid uuid
  */
 function openScene(uuid) {
-  Editor.Panel.open('scene', { uuid });
+  Editor.Message.send('scene', 'open-scene', uuid);
 }
 
 /**
@@ -460,16 +448,17 @@ function openScene(uuid) {
  * @param {string} uuid uuid
  */
 function openPrefab(uuid) {
-  Editor.Ipc.sendToAll('scene:enter-prefab-edit-mode', uuid);
+  Editor.Message.send('scene', 'open-scene', uuid);
 }
 
 /**
- * 聚焦到文件（在资源管理器中显示并选中文件）
+ * 在资源管理器中显示并选中文件
  * @param {string} uuid uuid
  */
 function focusOnFile(uuid) {
-  Editor.Ipc.sendToAll('assets:hint', uuid);
-  Editor.Selection.select('asset', uuid);
+  const Selection = Editor.Selection;
+  Selection.clear('asset');
+  Selection.select('asset', uuid);
 }
 
 /**
@@ -480,8 +469,8 @@ async function checkUpdate(logWhatever) {
   const hasNewVersion = await Updater.check();
   // 打印到控制台
   if (hasNewVersion) {
-    Editor.success(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
+    console.info(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
   } else if (logWhatever) {
-    Editor.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
+    console.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
   }
 }

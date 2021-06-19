@@ -8,7 +8,7 @@
 
 > ⚠ 注意
 >
-> 当前分支为 **Cocos Creator 2.x** 版本，**Cocos Creator 3.x** 版本请切换到 `ccc-v3` 分支，点击[这里](https://gitee.com/ifaswind/ccc-quick-finder/tree/ccc-v3/)立即切换。
+> 当前分支为 **Cocos Creator 3.x** 版本，**Cocos Creator 2.x** 版本请切换到 `master` 分支，点击[这里](https://gitee.com/ifaswind/ccc-quick-finder/tree/master/)立即切换。
 
 
 
@@ -40,7 +40,7 @@
 
 平台：Windows、macOS
 
-引擎：Cocos Creator 2.x
+引擎：Cocos Creator 3.x
 
 
 

@@ -8,7 +8,7 @@
 
 > ⚠ Attention
 >
-> Current branch is for **Cocos Creator 2.x**, if you're looking for **Cocos Creator 3.x** version ,please switch to branch `ccc-v3`, Click [here](https://gitee.com/ifaswind/ccc-quick-finder/tree/ccc-v3/) to switch branch immediately.
+> Current branch is for **Cocos Creator 3.x**, if you're looking for **Cocos Creator 2.x** version ,please switch to branch `master`, Click [here](https://gitee.com/ifaswind/ccc-quick-finder/tree/master/) to switch branch immediately.
 
 
 
@@ -40,7 +40,7 @@ If you like this project, don't forget to star [![star](https://gitee.com/ifaswi
 
 Platform: Windows、macOS
 
-Engine: Cocos Creator 2.x
+Engine: Cocos Creator 3.x
 
 
 

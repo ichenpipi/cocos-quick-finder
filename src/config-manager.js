@@ -1,14 +1,8 @@
 const Path = require('path');
 const Fs = require('fs');
 
-/** 包名 */
-const PACKAGE_NAME = require('../package.json').name;
-
 /** package.json 的路径 */
 const packageFilePath = Path.join(__dirname, '../package.json');
-
-/** package.json 中的菜单项 key */
-const menuItemKey = `i18n:MAIN_MENU.package.title/i18n:${PACKAGE_NAME}.name/i18n:${PACKAGE_NAME}.search`;
 
 /** 配置文件路径 */
 const configPath = Path.join(__dirname, '../config.json');
@@ -32,7 +26,8 @@ const ConfigManager = {
         const configData = { ...defaultConfig };
         // 快捷键
         const packageData = JSON.parse(Fs.readFileSync(packageFilePath));
-        configData.hotkey = packageData['main-menu'][menuItemKey]['accelerator'];
+        const item = packageData['contributions']['shortcuts'][0];
+        configData.hotkey = item['win'];
         // 配置
         if (Fs.existsSync(configPath)) {
             const localConfig = JSON.parse(Fs.readFileSync(configPath));
@@ -55,9 +50,10 @@ const ConfigManager = {
         Fs.writeFileSync(configPath, JSON.stringify(configData, null, 2));
         // 快捷键
         const packageData = JSON.parse(Fs.readFileSync(packageFilePath)),
-            menuItem = packageData['main-menu'][menuItemKey];
-        if (menuItem['accelerator'] !== config.hotkey) {
-            menuItem['accelerator'] = config.hotkey;
+            item = packageData['contributions']['shortcuts'][0];
+        if (item['win'] !== config.hotkey) {
+            item['win'] = config.hotkey;
+            item['mac'] = config.hotkey;
             Fs.writeFileSync(packageFilePath, JSON.stringify(packageData, null, 2));
         }
     },

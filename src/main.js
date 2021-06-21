@@ -19,7 +19,7 @@ const LANG = Editor.lang;
  */
 const translate = (key) => I18n.translate(LANG, key);
 
-/** 扩展名 */
+/** 扩展名称 */
 const EXTENSION_NAME = translate('name');
 
 module.exports = {
@@ -162,6 +162,8 @@ function openSearchBar() {
     closeSearchBar();
     return;
   }
+  // 收集项目中的文件信息
+  collectFiles();
   // 创建窗口
   const winSize = [500, 600],
     winPos = getPosition(winSize, 'top'),
@@ -194,16 +196,12 @@ function openSearchBar() {
   });
   // 就绪后展示（避免闪烁）
   win.on('ready-to-show', () => win.show());
-  // 展示后（收集项目中的文件信息）
-  // win.on('show', () => collectFiles());
   // 失焦后（自动关闭）
   win.on('blur', () => closeSearchBar());
   // 关闭后（移除引用）
   win.on('closed', () => (searchBar = null));
   // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
   // win.webContents.openDevTools({ mode: 'detach' });
-  // 收集项目中的文件信息
-  collectFiles();
 }
 
 /**
@@ -417,7 +415,7 @@ function getMatchFiles(keyword) {
   // 下面这行正则插入很炫酷，但是性能不好，耗时接近 split + join 的 10 倍
   // const pattern = keyword.replace(/(?<=.)(.)/g, '.*$1');
   // 查找并匹配
-  if (cache && cache.length > 0) {
+  if (cache) {
     // 从缓存中查找
     for (let i = 0, l = cache.length; i < l; i++) {
       const { name, path, extname } = cache[i];
@@ -431,8 +429,6 @@ function getMatchFiles(keyword) {
     }
     // 排序（similarity 越小，匹配的长度越短，匹配度越高）
     results.sort((a, b) => a.similarity - b.similarity);
-  } else {
-    print('warn', translate('dataError'));
   }
   // Done
   return results;

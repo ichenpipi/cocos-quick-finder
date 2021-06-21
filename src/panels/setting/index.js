@@ -156,20 +156,6 @@ const App = {
       ConfigManager.set(config);
     },
 
-    /**
-     * 检查更新
-     */
-    async checkUpdate() {
-      const hasNewVersion = await Updater.check();
-      if (hasNewVersion) {
-        // 打印到控制台
-        ipcRenderer.send(`${PACKAGE_NAME}:print`, {
-          type: 'success',
-          content: translate('hasNewVersion'),
-        });
-      }
-    },
-
   },
 
   /**
@@ -187,8 +173,8 @@ const App = {
         shell.openExternal(url);
       });
     });
-    // 检查更新
-    this.checkUpdate();
+    // （主进程）检查更新
+    ipcRenderer.send(`${PACKAGE_NAME}:check-update`, false);
   },
 
   /**

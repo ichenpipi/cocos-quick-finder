@@ -1,18 +1,23 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const Fs = require('fs');
 const Path = require('path');
+const Util = require('util');
 const ConfigManager = require('./config-manager');
+const I18n = require('./i18n');
 const Updater = require('./updater');
 
 /** 包名 */
 const PACKAGE_NAME = require('../package.json').name;
+
+/** 语言 */
+const LANG = Editor.I18n.getLanguage();
 
 /**
  * i18n
  * @param {string} key
  * @returns {string}
  */
-const translate = (key) => Editor.I18n.t(`${PACKAGE_NAME}.${key}`);
+const translate = (key) => I18n.translate(LANG, key);
 
 /** 扩展名称 */
 const EXTENSION_NAME = translate('name');
@@ -53,11 +58,13 @@ exports.load = function () {
   ipcMain.on(`${PACKAGE_NAME}:match-keyword`, onMatchKeywordEvent);
   ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
   ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
+  ipcMain.on(`${PACKAGE_NAME}:check-update`, onCheckUpdateEvent);
   ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
   // 自动检查更新
   const config = ConfigManager.get();
   if (config.autoCheckUpdate) {
-    checkUpdate(false);
+    // 延迟一段时间
+    setTimeout(() => checkUpdate(false), 10 * 1000);
   }
 }
 
@@ -69,6 +76,7 @@ exports.unload = function () {
   ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
   ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
   ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
+  ipcMain.removeAllListeners(`${PACKAGE_NAME}:check-update`);
   ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
 }
 
@@ -105,32 +113,22 @@ async function onFocusEvent(event, path) {
 }
 
 /**
+ * （渲染进程）检查更新回调
+ * @param {Electron.IpcMainEvent} event 
+ * @param {boolean} logWhatever 无论有无更新都打印提示
+ */
+function onCheckUpdateEvent(event, logWhatever) {
+  checkUpdate(logWhatever);
+}
+
+/**
  * （渲染进程）打印事件回调
  * @param {Electron.IpcMainEvent} event 
  * @param {{ type: string, content: string }} options 选项
  */
 function onPrintEvent(event, options) {
-  const { type, content } = options,
-    message = `[${EXTENSION_NAME}] ${content}`;
-  switch (type) {
-    default:
-    case 'log': {
-      console.log(message);
-      break;
-    }
-    case 'warn': {
-      console.warn(message);
-      break;
-    }
-    case 'error': {
-      console.error(message);
-      break;
-    }
-    case 'success': {
-      console.info(message);
-      break;
-    }
-  }
+  const { type, content } = options;
+  print(type, content);
 }
 
 /**
@@ -154,6 +152,8 @@ function openSearchBar() {
     closeSearchBar();
     return;
   }
+  // 收集项目中的文件信息
+  collectFiles();
   // 创建窗口
   const winSize = [500, 600],
     winPos = getPosition(winSize, 'top'),
@@ -164,6 +164,7 @@ function openSearchBar() {
       y: winPos[1] + 200,
       frame: false,
       resizable: false,
+      fullscreenable: false,
       skipTaskbar: true,
       alwaysOnTop: true,
       transparent: true,
@@ -176,8 +177,7 @@ function openSearchBar() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.I18n.getLanguage();
-  win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${lang}`);
+  win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${LANG}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'Escape') {
@@ -186,8 +186,6 @@ function openSearchBar() {
   });
   // 就绪后展示（避免闪烁）
   win.on('ready-to-show', () => win.show());
-  // 展示后（缓存数据）
-  win.on('show', () => (cache = getAllFiles()));
   // 失焦后（自动关闭）
   win.on('blur', () => closeSearchBar());
   // 关闭后（移除引用）
@@ -244,6 +242,7 @@ function openSettingPanel() {
       resizable: true,
       minimizable: false,
       maximizable: false,
+      fullscreenable: false,
       skipTaskbar: true,
       alwaysOnTop: true,
       hasShadow: false,
@@ -253,8 +252,7 @@ function openSettingPanel() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.I18n.getLanguage();
-  win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${lang}`);
+  win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${LANG}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'Escape') {
@@ -315,44 +313,37 @@ function getPosition(size, anchor) {
 }
 
 /**
+ * 获取文件状态
+ * @param {Fs.PathLike} path 路径
+ * @returns {Promise<Fs.stats>}
+ */
+const stat = Util.promisify(Fs.stat);
+
+/**
+ * 读取文件夹
+ * @param {Fs.PathLike} path 路径
+ * @returns {Promise<string[]>}
+ */
+const readdir = Util.promisify(Fs.readdir);
+
+/**
  * 遍历文件/文件夹并执行函数
  * @param {Fs.PathLike} path 路径
  * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void} handler 处理函数
  */
-function map(path, handler) {
+async function map(path, handler) {
   if (!Fs.existsSync(path)) {
-    return
+    return;
   }
-  const stats = Fs.statSync(path);
+  const stats = await stat(path);
   if (stats.isFile()) {
     handler(path, stats);
   } else {
-    const names = Fs.readdirSync(path);
+    const names = await readdir(path);
     for (const name of names) {
-      map(Path.join(path, name), handler);
+      await map(Path.join(path, name), handler);
     }
   }
-}
-
-/**
- * 获取项目中所有文件
- * @returns {{ name: string, path: string, extname: string }[]}
- */
-function getAllFiles() {
-  const assetsPath = Path.join(Editor.Project.path, 'assets/'),
-    results = [];
-  const handler = (path, stat) => {
-    // 过滤
-    if (filter(path)) {
-      const name = Path.basename(path),
-        extname = Path.extname(path);
-      results.push({ name, path, extname });
-    }
-  }
-  // 遍历项目文件
-  map(assetsPath, handler);
-  // Done
-  return results;
 }
 
 /**
@@ -376,6 +367,30 @@ function filter(path) {
 }
 
 /**
+ * 收集项目中的文件信息
+ */
+async function collectFiles() {
+  // 重置缓存
+  cache = [];
+  // 项目目录
+  const assetsPath = Path.join(Editor.Project.path, 'assets/');
+  const handler = (path, stat) => {
+    // 过滤
+    if (filter(path)) {
+      const name = Path.basename(path),
+        extname = Path.extname(path);
+      cache.push({ name, path, extname });
+    }
+  }
+  // 遍历项目文件
+  await map(assetsPath, handler);
+  // 发消息通知渲染进程（搜索栏）
+  if (searchBar) {
+    searchBar.webContents.send(`${PACKAGE_NAME}:data-update`);
+  }
+}
+
+/**
  * 获取项目中匹配关键词的文件
  * @param {string} keyword 关键词
  * @returns {{ name: string, path: string, extname: string, similarity: number }[]}
@@ -388,7 +403,7 @@ function getMatchFiles(keyword) {
   // 下面这行正则插入很炫酷，但是性能不好，耗时接近 split + join 的 10 倍
   // const pattern = keyword.replace(/(?<=.)(.)/g, '.*$1');
   // 查找并匹配
-  if (cache && cache.length > 0) {
+  if (cache) {
     // 从缓存中查找
     for (let i = 0, l = cache.length; i < l; i++) {
       const { name, path, extname } = cache[i];
@@ -402,8 +417,6 @@ function getMatchFiles(keyword) {
     }
     // 排序（similarity 越小，匹配的长度越短，匹配度越高）
     results.sort((a, b) => a.similarity - b.similarity);
-  } else {
-    console.warn(`[${EXTENSION_NAME}]`, translate('dataError'));
   }
   // Done
   return results;
@@ -469,8 +482,40 @@ async function checkUpdate(logWhatever) {
   const hasNewVersion = await Updater.check();
   // 打印到控制台
   if (hasNewVersion) {
-    console.info(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
+    print('info', translate('hasNewVersion'));
   } else if (logWhatever) {
-    console.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
+    print('info', translate('currentLatest'));
+  }
+}
+
+/**
+ * 打印信息到控制台
+ * @param {'log' | 'info' | 'warn' | 'error' | string} type 类型 | 内容
+ * @param {string} content 内容
+ */
+function print(type, content = undefined) {
+  if (content == undefined) {
+    content = type;
+    type = 'log';
+  }
+  const message = `[${EXTENSION_NAME}] ${content}`;
+  switch (type) {
+    default:
+    case 'log': {
+      console.log(message);
+      break;
+    }
+    case 'info': {
+      console.info(message);
+      break;
+    }
+    case 'warn': {
+      console.warn(message);
+      break;
+    }
+    case 'error': {
+      console.error(message);
+      break;
+    }
   }
 }

@@ -1,6 +1,6 @@
 /**
  * 浏览器工具
- * @version 20210520
+ * @version 20210621
  */
 const BrowserUtils = {
 
@@ -25,8 +25,8 @@ const BrowserUtils = {
             }
         }
         return null;
-    }
+    },
 
-}
+};
 
 module.exports = BrowserUtils;

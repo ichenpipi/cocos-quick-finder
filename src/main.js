@@ -1,6 +1,7 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const Fs = require('fs');
 const Path = require('path');
+const Util = require('util');
 const ConfigManager = require('./config-manager');
 const I18n = require('./i18n');
 const Updater = require('./updater');
@@ -193,14 +194,16 @@ function openSearchBar() {
   });
   // 就绪后展示（避免闪烁）
   win.on('ready-to-show', () => win.show());
-  // 展示后（缓存数据）
-  win.on('show', () => (cache = getAllFiles()));
+  // 展示后（收集项目中的文件信息）
+  // win.on('show', () => collectFiles());
   // 失焦后（自动关闭）
   win.on('blur', () => closeSearchBar());
   // 关闭后（移除引用）
   win.on('closed', () => (searchBar = null));
   // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
   // win.webContents.openDevTools({ mode: 'detach' });
+  // 收集项目中的文件信息
+  collectFiles();
 }
 
 /**
@@ -324,21 +327,35 @@ function getPosition(size, anchor) {
 }
 
 /**
+ * 获取文件状态
+ * @param {Fs.PathLike} path 路径
+ * @returns {Promise<Fs.stats>}
+ */
+const stat = Util.promisify(Fs.stat);
+
+/**
+ * 读取文件夹
+ * @param {Fs.PathLike} path 路径
+ * @returns {Promise<string[]>}
+ */
+const readdir = Util.promisify(Fs.readdir);
+
+/**
  * 遍历文件/文件夹并执行函数
  * @param {Fs.PathLike} path 路径
  * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void} handler 处理函数
  */
-function map(path, handler) {
+async function map(path, handler) {
   if (!Fs.existsSync(path)) {
     return;
   }
-  const stats = Fs.statSync(path);
+  const stats = await stat(path);
   if (stats.isFile()) {
     handler(path, stats);
   } else {
-    const names = Fs.readdirSync(path);
+    const names = await readdir(path);
     for (const name of names) {
-      map(Path.join(path, name), handler);
+      await map(Path.join(path, name), handler);
     }
   }
 }
@@ -364,24 +381,27 @@ function filter(path) {
 }
 
 /**
- * 获取项目中所有文件
- * @returns {{ name: string, path: string, extname: string }[]}
+ * 收集项目中的文件信息
  */
-function getAllFiles() {
-  const assetsPath = Editor.url('db://assets/'),
-    results = [];
+async function collectFiles() {
+  // 重置缓存
+  cache = [];
+  // 项目目录
+  const assetsPath = Editor.url('db://assets/');
   const handler = (path, stat) => {
     // 过滤
     if (filter(path)) {
       const name = Path.basename(path),
         extname = Path.extname(path);
-      results.push({ name, path, extname });
+      cache.push({ name, path, extname });
     }
   }
   // 遍历项目文件
-  map(assetsPath, handler);
-  // Done
-  return results;
+  await map(assetsPath, handler);
+  // 发消息通知渲染进程（搜索栏）
+  if (searchBar) {
+    searchBar.webContents.send(`${PACKAGE_NAME}:data-update`);
+  }
 }
 
 /**

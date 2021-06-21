@@ -197,8 +197,17 @@ const App = {
     },
 
     /**
+     * （主进程）数据更新回调
+     * @param {Electron.IpcRendererEvent} event 
+     */
+    onDataUpdate(event) {
+      // 触发文件搜索
+      this.onInputChange(null);
+    },
+
+    /**
      * （主进程）匹配关键词回调
-     * @param {*} event 
+     * @param {Electron.IpcRendererEvent} event 
      * @param {{ name: string, path: string, extname: string }[]} results 结果
      */
     onMatchKeywordReply(event, results) {
@@ -266,6 +275,7 @@ const App = {
    */
   mounted() {
     // 监听事件
+    ipcRenderer.on(`${PACKAGE_NAME}:data-update`, this.onDataUpdate.bind(this));
     ipcRenderer.on(`${PACKAGE_NAME}:match-keyword-reply`, this.onMatchKeywordReply.bind(this));
     // 下一帧
     this.$nextTick(() => {
@@ -279,6 +289,7 @@ const App = {
    */
   beforeDestroy() {
     // 取消事件监听
+    ipcRenderer.removeAllListeners(`${PACKAGE_NAME}:data-update`);
     ipcRenderer.removeAllListeners(`${PACKAGE_NAME}:match-keyword-reply`);
   },
 
@@ -315,4 +326,4 @@ const iconMap = {
   '.png': 'atlas',
   '.jpg': 'atlas',
   '.plist': 'sprite-atlas',
-}
+};

@@ -3,7 +3,7 @@ const Path = require('path');
 
 /**
  * 文件工具
- * @version 20210520
+ * @version 20210621
  */
 const FileUtils = {
 
@@ -13,7 +13,9 @@ const FileUtils = {
      * @param {Fs.PathLike} destPath 目标路径
      */
     copy(srcPath, destPath) {
-        if (!Fs.existsSync(srcPath)) return;
+        if (!Fs.existsSync(srcPath)) {
+            return;
+        }
         const stats = Fs.statSync(srcPath);
         if (stats.isDirectory()) {
             if (!Fs.existsSync(destPath)) Fs.mkdirSync(destPath);
@@ -31,7 +33,9 @@ const FileUtils = {
      * @param {Fs.PathLike} path 路径
      */
     delete(path) {
-        if (!Fs.existsSync(path)) return;
+        if (!Fs.existsSync(path)) {
+            return;
+        }
         const stats = Fs.statSync(path);
         if (stats.isDirectory()) {
             const names = Fs.readdirSync(path);
@@ -50,7 +54,9 @@ const FileUtils = {
      * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void} handler 处理函数
      */
     map(path, handler) {
-        if (!Fs.existsSync(path)) return
+        if (!Fs.existsSync(path)) {
+            return;
+        }
         const stats = Fs.statSync(path);
         if (stats.isDirectory()) {
             const names = Fs.readdirSync(path);
@@ -60,8 +66,8 @@ const FileUtils = {
         } else if (stats.isFile()) {
             handler(path, stats);
         }
-    }
+    },
 
-}
+};
 
 module.exports = FileUtils;

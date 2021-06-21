@@ -2,17 +2,21 @@ const { BrowserWindow, ipcMain } = require('electron');
 const Fs = require('fs');
 const Path = require('path');
 const ConfigManager = require('./config-manager');
+const I18n = require('./i18n');
 const Updater = require('./updater');
 
 /** 包名 */
 const PACKAGE_NAME = require('../package.json').name;
+
+/** 语言 */
+const LANG = Editor.lang;
 
 /**
  * i18n
  * @param {string} key
  * @returns {string}
  */
-const translate = (key) => Editor.T(`${PACKAGE_NAME}.${key}`);
+const translate = (key) => I18n.translate(LANG, key);
 
 /** 扩展名 */
 const EXTENSION_NAME = translate('name');
@@ -56,11 +60,13 @@ module.exports = {
     ipcMain.on(`${PACKAGE_NAME}:match-keyword`, onMatchKeywordEvent);
     ipcMain.on(`${PACKAGE_NAME}:open`, onOpenEvent);
     ipcMain.on(`${PACKAGE_NAME}:focus`, onFocusEvent);
+    ipcMain.on(`${PACKAGE_NAME}:check-update`, onCheckUpdateEvent);
     ipcMain.on(`${PACKAGE_NAME}:print`, onPrintEvent);
     // 自动检查更新
     const config = ConfigManager.get();
     if (config.autoCheckUpdate) {
-      checkUpdate(false);
+      // 延迟一段时间
+      setTimeout(() => checkUpdate(false), 10 * 1000);
     }
   },
 
@@ -72,6 +78,7 @@ module.exports = {
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:match-keyword`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:open`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:focus`);
+    ipcMain.removeAllListeners(`${PACKAGE_NAME}:check-update`);
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
   },
 
@@ -115,32 +122,22 @@ function onFocusEvent(event, path) {
 }
 
 /**
+ * （渲染进程）检查更新回调
+ * @param {Electron.IpcMainEvent} event 
+ * @param {boolean} logWhatever 无论有无更新都打印提示
+ */
+function onCheckUpdateEvent(event, logWhatever) {
+  checkUpdate(logWhatever);
+}
+
+/**
  * （渲染进程）打印事件回调
  * @param {Electron.IpcMainEvent} event 
  * @param {{ type: string, content: string }} options 选项
  */
 function onPrintEvent(event, options) {
-  const { type, content } = options,
-    message = `[${EXTENSION_NAME}] ${content}`;
-  switch (type) {
-    default:
-    case 'log': {
-      Editor.log(message);
-      break;
-    }
-    case 'warn': {
-      Editor.warn(message);
-      break;
-    }
-    case 'error': {
-      Editor.error(message);
-      break;
-    }
-    case 'success': {
-      Editor.success(message);
-      break;
-    }
-  }
+  const { type, content } = options;
+  print(type, content);
 }
 
 /**
@@ -174,6 +171,7 @@ function openSearchBar() {
       y: winPos[1] + 200,
       frame: false,
       resizable: false,
+      fullscreenable: false,
       skipTaskbar: true,
       alwaysOnTop: true,
       transparent: true,
@@ -186,8 +184,7 @@ function openSearchBar() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.lang;
-  win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${lang}`);
+  win.loadURL(`file://${__dirname}/panels/search/index.html?lang=${LANG}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'Escape') {
@@ -256,6 +253,7 @@ function openSettingPanel() {
       resizable: true,
       minimizable: false,
       maximizable: false,
+      fullscreenable: false,
       skipTaskbar: true,
       alwaysOnTop: true,
       hasShadow: false,
@@ -265,8 +263,7 @@ function openSettingPanel() {
       },
     });
   // 加载页面（并传递当前语言）
-  const lang = Editor.lang;
-  win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${lang}`);
+  win.loadURL(`file://${__dirname}/panels/setting/index.html?lang=${LANG}`);
   // 监听按键（ESC 关闭）
   win.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'Escape') {
@@ -333,7 +330,7 @@ function getPosition(size, anchor) {
  */
 function map(path, handler) {
   if (!Fs.existsSync(path)) {
-    return
+    return;
   }
   const stats = Fs.statSync(path);
   if (stats.isFile()) {
@@ -344,6 +341,26 @@ function map(path, handler) {
       map(Path.join(path, name), handler);
     }
   }
+}
+
+/**
+ * 过滤文件
+ * @param {string} path 路径
+ * @returns {boolean}
+ */
+function filter(path) {
+  // 扩展名
+  const extname = Path.extname(path);
+  // 排除 meta 文件和没有扩展名的文件
+  if (extname === '.meta' || extname === '') {
+    return false;
+  }
+  // 只要场景和预制体
+  // if (extname !== '.fire' && extname !== '.prefab') {
+  //   return false;
+  // }
+  // 可用
+  return true;
 }
 
 /**
@@ -365,26 +382,6 @@ function getAllFiles() {
   map(assetsPath, handler);
   // Done
   return results;
-}
-
-/**
- * 过滤文件
- * @param {string} path 路径
- * @returns {boolean}
- */
-function filter(path) {
-  // 扩展名
-  const extname = Path.extname(path);
-  // 排除 meta 文件和没有扩展名的文件
-  if (extname === '.meta' || extname === '') {
-    return false;
-  }
-  // 只要场景和预制体
-  // if (extname !== '.fire' && extname !== '.prefab') {
-  //   return false;
-  // }
-  // 可用
-  return true;
 }
 
 /**
@@ -415,7 +412,7 @@ function getMatchFiles(keyword) {
     // 排序（similarity 越小，匹配的长度越短，匹配度越高）
     results.sort((a, b) => a.similarity - b.similarity);
   } else {
-    Editor.warn(`[${EXTENSION_NAME}]`, translate('dataError'));
+    print('warn', translate('dataError'));
   }
   // Done
   return results;
@@ -480,8 +477,40 @@ async function checkUpdate(logWhatever) {
   const hasNewVersion = await Updater.check();
   // 打印到控制台
   if (hasNewVersion) {
-    Editor.success(`[${EXTENSION_NAME}]`, translate('hasNewVersion'));
+    print('info', translate('hasNewVersion'));
   } else if (logWhatever) {
-    Editor.log(`[${EXTENSION_NAME}]`, translate('currentLatest'));
+    print('info', translate('currentLatest'));
+  }
+}
+
+/**
+ * 打印信息到控制台
+ * @param {'log' | 'info' | 'warn' | 'error' | string} type 类型 | 内容
+ * @param {string} content 内容
+ */
+function print(type, content = undefined) {
+  if (content == undefined) {
+    content = type;
+    type = 'log';
+  }
+  const message = `[${EXTENSION_NAME}] ${content}`;
+  switch (type) {
+    default:
+    case 'log': {
+      Editor.log(message);
+      break;
+    }
+    case 'info': {
+      Editor.info(message);
+      break;
+    }
+    case 'warn': {
+      Editor.warn(message);
+      break;
+    }
+    case 'error': {
+      Editor.error(message);
+      break;
+    }
   }
 }

@@ -47,7 +47,7 @@ module.exports = {
     /**
      * 检查更新
      */
-    'check-update'() {
+    'force-check-update'() {
       checkUpdate(true);
     },
 
@@ -67,7 +67,8 @@ module.exports = {
     const config = ConfigManager.get();
     if (config.autoCheckUpdate) {
       // 延迟一段时间
-      setTimeout(() => checkUpdate(false), 10 * 1000);
+      const delay = 6 * 60 * 1000;
+      setTimeout(() => checkUpdate(false), delay);
     }
   },
 
@@ -83,7 +84,7 @@ module.exports = {
     ipcMain.removeAllListeners(`${PACKAGE_NAME}:print`);
   },
 
-}
+};
 
 /**
  * （渲染进程）关键词匹配事件回调

@@ -2,10 +2,11 @@
   "name": "ccc-quick-finder",
   "version": "1.2.2.20210621",
   "description": "快速搜索定位项目中的文件，还可以快速打开场景和预制体...",
-  "author": "ifaswind（陈皮皮）",
-  "author-info": {
-    "wechat": "im_chenpipi",
+  "author": {
+    "name": "ifaswind (陈皮皮)",
     "email": "952157129@qq.com",
+    "url": "https://chenpipi.cn",
+    "wechat": "im_chenpipi",
     "git-home": "https://gitee.com/ifaswind",
     "official-account": "公众号「菜鸟小栈」"
   },
@@ -13,6 +14,7 @@
     "type": "git",
     "url": "https://gitee.com/ifaswind/ccc-quick-finder"
   },
+  "license": "MIT",
   "main": "src/main.js",
   "main-menu": {
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
@@ -25,7 +27,7 @@
       "icon": "/images/setting.png"
     },
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
-      "message": "ccc-quick-finder:check-update",
+      "message": "ccc-quick-finder:force-check-update",
       "icon": "/images/update.png"
     }
   },

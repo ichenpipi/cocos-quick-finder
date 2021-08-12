@@ -87,9 +87,9 @@ And then, click on anywhere outside the search bar or press `ESC` to close the s
 
 
 
-### Setting
+### Settings
 
-Click on *Extension -> Quick Finder -> Setting* option to open the setting panel.
+Click on *Extension -> Quick Finder -> Settings* option to open the setting panel.
 
 In the setting panel, you can choose a hotkey(shortcut, for opening the search bar quickly) in preset list, or customize one by yourself.
 

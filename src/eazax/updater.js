@@ -1,22 +1,39 @@
-const fetch = require('../lib/node-fetch');
+const fetch = require('../../lib/node-fetch');
+const PackageUtil = require('./package-util');
+
+/** 本地版本 */
+const LOCAL_VERSION = PackageUtil.version;
+
+/** 远程仓库地址 */
+const REMOTE_URL = PackageUtil.repository;
 
 /**
  * 更新器
+ * @author ifaswind (陈皮皮)
+ * @version 20210804
  */
 const Updater = {
 
     /**
-     * 远端地址
+     * 远程仓库地址
      * @type {string}
      */
-    remoteUrl: 'https://gitee.com/ifaswind/ccc-quick-finder',
+    get remote() {
+        return REMOTE_URL;
+    },
+
+    /**
+     * 分支
+     * @type {string}
+     */
+    branch: 'master',
 
     /**
      * 获取远端的 package.json
      * @returns {Promise<object>}
      */
     async getRemotePackageJson() {
-        const packageJsonUrl = `${this.remoteUrl}/raw/master/package.json`;
+        const packageJsonUrl = `${Updater.remote}/raw/${Updater.branch}/package.json`;
         // 发起网络请求
         const response = await fetch(packageJsonUrl, {
             method: 'GET',
@@ -37,7 +54,7 @@ const Updater = {
      * @returns {Promise<string>}
      */
     async getRemoteVersion() {
-        const package = await this.getRemotePackageJson();
+        const package = await Updater.getRemotePackageJson();
         if (!package) {
             return null;
         }
@@ -50,7 +67,7 @@ const Updater = {
      * @returns {string}
      */
     getLocalVersion() {
-        return require('../package.json').version;
+        return LOCAL_VERSION;
     },
 
     /**
@@ -80,8 +97,8 @@ const Updater = {
      * compareVersion('1.2.0.1', '1.2.0');  // 1
      */
     compareVersion(a, b) {
-        const acs = this.splitVersionString(a),
-            bcs = this.splitVersionString(b);
+        const acs = Updater.splitVersionString(a),
+            bcs = Updater.splitVersionString(b);
         const count = Math.max(acs.length, bcs.length);
         for (let i = 0; i < count; i++) {
             const ac = acs[i],
@@ -104,14 +121,14 @@ const Updater = {
      */
     async check() {
         // 远端版本号
-        const remoteVersion = await this.getRemoteVersion();
+        const remoteVersion = await Updater.getRemoteVersion();
         if (!remoteVersion) {
             return false;
         }
         // 本地版本号
-        const localVersion = this.getLocalVersion();
+        const localVersion = Updater.getLocalVersion();
         // 对比版本号
-        const result = this.compareVersion(localVersion, remoteVersion);
+        const result = Updater.compareVersion(localVersion, remoteVersion);
         return (result < 0);
     },
 

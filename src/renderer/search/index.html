@@ -15,18 +15,18 @@
         <!-- 搜索 -->
         <div class="search">
             <!-- 输入框 -->
-            <input ref="input" class="input" type="text" v-model="keyword" :placeholder="placeholderLabel"
+            <input ref="input" class="input" type="text" v-model="keyword" :placeholder="t('searchPlaceholder')"
                 @input="onInputChange" @keydown.enter="onEnterBtnClick" @keydown.up="onUpBtnClick"
                 @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick" @keydown.right="onRightBtnClick"
                 spellcheck="false" autofocus />
             <!-- 按钮 -->
-            <button class="btn" v-text="buttonLabel" @click="onEnterBtnClick"></button>
+            <button class="btn" v-text="t('searchBtn')" @click="onEnterBtnClick"></button>
         </div>
         <!-- 结果列表 -->
-        <div class="result" v-if="results.length > 0">
+        <div class="result" v-if="items.length > 0">
             <ul class="list">
-                <li class="item" v-for="(item, index) in results" :key="index" :id="'item-' + index"
-                    @click="onResultClick(item, index)" :selected="index === curIndex">
+                <li class="item" v-for="(item, index) in items" :key="index" :id="'item-' + index"
+                    @click="onItemClick(item, index)" :selected="index === curIndex">
                     <div class="info">
                         <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
                         <span class="name">{{ item.name }}</span>

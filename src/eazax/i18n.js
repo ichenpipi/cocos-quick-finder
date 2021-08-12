@@ -1,8 +1,10 @@
-const zh = require('../i18n/zh');
-const en = require('../i18n/en');
+const zh = require('../../i18n/zh');
+const en = require('../../i18n/en');
 
 /**
  * 多语言
+ * @author ifaswind (陈皮皮)
+ * @version 20210713
  */
 const I18n = {
 
@@ -23,8 +25,11 @@ const I18n = {
      * @returns {string}
      */
     translate(lang, key) {
-        return this[lang] ? this[lang][key] : undefined;
-    }
+        if (I18n[lang] && I18n[lang][key]) {
+            return I18n[lang][key];
+        }
+        return key;
+    },
 
 };
 

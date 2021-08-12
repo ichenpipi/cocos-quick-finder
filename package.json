@@ -10,31 +10,28 @@
     "git-home": "https://gitee.com/ifaswind",
     "official-account": "公众号「菜鸟小栈」"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://gitee.com/ifaswind/ccc-quick-finder"
-  },
+  "homepage": "https://gitee.com/ifaswind/ccc-quick-finder",
+  "repository": "https://gitee.com/ifaswind/ccc-quick-finder",
   "license": "MIT",
-  "main": "src/main.js",
+  "main": "src/main/index.js",
   "main-menu": {
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
       "message": "ccc-quick-finder:open-search-panel",
       "icon": "/images/search.png",
       "accelerator": "F1"
     },
-    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.setting": {
-      "message": "ccc-quick-finder:open-setting-panel",
+    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.settings": {
+      "message": "ccc-quick-finder:open-settings-panel",
       "icon": "/images/setting.png"
     },
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
-      "message": "ccc-quick-finder:force-check-update",
+      "message": "ccc-quick-finder:menu-check-update",
       "icon": "/images/update.png"
     }
   },
   "reload": {
     "renderer": [],
     "ignore": [
-      "src/panels/**/*",
       "config.json",
       "CHANGELOG.md",
       "README.md",

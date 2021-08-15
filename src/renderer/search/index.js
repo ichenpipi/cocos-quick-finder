@@ -18,7 +18,6 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
-        console.log('setup', props, context);
 
         // 当前选中的项目
         let curItem = null;
@@ -203,7 +202,7 @@ const App = {
          * @param {{ name: string, path: string, extname: string }[]} results 结果
          */
         function onMatchReply(event, results) {
-            // 确保清除已有数据
+            // 清除已有数据
             items.value.length = 0;
             // 当只有一个结果时直接选中
             if (results.length === 1) {
@@ -222,7 +221,9 @@ const App = {
                         count = length >= threshold ? threshold : length,
                         part = results.splice(0, count);
                     // 加载一部分
-                    items.value.push(...part);
+                    for (let i = 0, l = part.length; i < l; i++) {
+                        items.value.push(part[i]);
+                    }
                     // 是否还有数据
                     if (results.length > 0) {
                         // 下一波继续
@@ -302,7 +303,7 @@ const App = {
             onDownBtnClick,
             onLeftBtnClick,
             onRightBtnClick,
-            onResultClick: onItemClick,
+            onItemClick,
             getIcon,
             getPath,
             t,

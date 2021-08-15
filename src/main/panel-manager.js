@@ -19,7 +19,7 @@ const PanelManager = {
 
     /**
      * 打开搜索栏
-     * @param {*} options 
+     * @param {{ onBeforeOpen: () => void, onClosed: () => void }} options 
      */
     openSearchBar(options) {
         // 已打开则关闭
@@ -28,42 +28,43 @@ const PanelManager = {
         }
         // 收集项目中的文件信息
         options.onBeforeOpen();
-        // 创建窗口
+        // 窗口尺寸和位置（macOS 标题栏高 28px）
         const winSize = [500, 600],
-            winPos = calcWindowPosition(winSize, 'top'),
-            win = PanelManager.search = new BrowserWindow({
-                width: winSize[0],
-                height: winSize[1],
-                x: winPos[0],
-                y: winPos[1] + 200,
-                frame: false,
-                resizable: false,
-                fullscreenable: false,
-                skipTaskbar: true,
-                alwaysOnTop: true,
-                transparent: true,
-                opacity: 0.95,
-                backgroundColor: '#00000000',
-                hasShadow: false,
-                show: false,
-                webPreferences: {
-                    nodeIntegration: true,
-                },
-            });
-        // 监听按键（ESC 关闭）
+            winPos = calcWindowPosition(winSize, 'top');
+        // 创建窗口
+        const win = PanelManager.search = new BrowserWindow({
+            width: winSize[0],
+            height: winSize[1],
+            x: winPos[0],
+            y: winPos[1] + 200,
+            frame: false,
+            resizable: false,
+            fullscreenable: false,
+            skipTaskbar: true,
+            alwaysOnTop: true,
+            transparent: true,
+            opacity: 0.95,
+            backgroundColor: '#00000000',
+            hasShadow: false,
+            show: false,
+            webPreferences: {
+                nodeIntegration: true,
+            },
+        });
+        // 监听按键
         win.webContents.on('before-input-event', (event, input) => {
             if (input.key === 'Escape') PanelManager.closeSearchBar();
         });
         // 就绪后展示（避免闪烁）
         win.on('ready-to-show', () => win.show());
-        // 失焦后（自动关闭）
+        // 失焦后
         win.on('blur', () => PanelManager.closeSearchBar());
-        // 关闭后（移除引用）
+        // 关闭后
         win.on('closed', () => {
             PanelManager.search = null;
             options.onClosed();
         });
-        // 加载页面（并传递当前语言）
+        // 加载页面
         const path = join(__dirname, '../renderer/search/index.html');
         win.loadURL(`file://${path}?lang=${language}`);
         // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
@@ -97,7 +98,7 @@ const PanelManager = {
             PanelManager.closeSettingsPanel();
             return;
         }
-        // 窗口高度和位置（macOS 标题栏高 28px）
+        // 窗口尺寸和位置（macOS 标题栏高 28px）
         const winSize = [500, 340],
             winPos = calcWindowPosition(winSize, 'center');
         // 创建窗口
@@ -123,21 +124,21 @@ const PanelManager = {
                 nodeIntegration: true,
             },
         });
-        // 监听按键（ESC 关闭）
+        // 监听按键
         win.webContents.on('before-input-event', (event, input) => {
             if (input.key === 'Escape') PanelManager.closeSettingsPanel();
         });
         // 就绪后（展示，避免闪烁）
         win.on('ready-to-show', () => win.show());
-        // 失焦后（关闭窗口）
-        // win.on('blur', () => PanelManager.closeSettingPanel());
-        // 关闭后（移除引用）
+        // 失焦后
+        win.on('blur', () => PanelManager.closeSettingPanel());
+        // 关闭后
         win.on('closed', () => (PanelManager.settings = null));
-        // 加载页面（并传递当前语言）
+        // 加载页面
         const path = join(__dirname, '../renderer/settings/index.html');
         win.loadURL(`file://${path}?lang=${language}`);
         // 调试用的 devtools（detach 模式需要取消失焦自动关闭）
-        win.webContents.openDevTools({ mode: 'detach' });
+        // win.webContents.openDevTools({ mode: 'detach' });
     },
 
     /**

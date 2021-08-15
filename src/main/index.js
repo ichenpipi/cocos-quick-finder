@@ -28,7 +28,7 @@ function load() {
  * 生命周期：卸载
  */
 function unload() {
-    // 关闭窗口
+    // 关闭搜索栏
     PanelManager.closeSearchBar();
     // 取消事件监听
     EditorKit.unregister();
@@ -48,10 +48,9 @@ function onMatchEvent(event, keyword) {
     // 返回结果给渲染进程
     if (event.reply) {
         MainUtil.reply(event, 'match-reply', results);
-        event.reply(`${PACKAGE_NAME}:match-reply`, results);
     } else {
         // 兼容低版本 electron
-        MainUtil.send(event, 'match-reply', results);
+        MainUtil.send(event.sender, 'match-reply', results);
     }
 }
 
@@ -99,14 +98,14 @@ function filter(path) {
  * 数据缓存
  * @type {{ name: string, path: string, extname: string }[]}
  */
-let caches;
+let caches = null;
 
 /**
  * 收集项目中的文件信息
  */
 async function collectFiles() {
     // 重置缓存
-    caches = [];
+    const _caches = caches = [];
     // 项目目录
     const assetsPath = Editor.url('db://assets/');
     const handler = (path, stat) => {
@@ -114,15 +113,15 @@ async function collectFiles() {
         if (filter(path)) {
             const name = Path.basename(path),
                 extname = Path.extname(path);
-            caches.push({ name, path, extname });
+            _caches.push({ name, path, extname });
         }
     }
     // 遍历项目文件
     await map(assetsPath, handler);
     // 发消息通知渲染进程（搜索栏）
-    if (PanelManager.search) {
-        const eventEmitter = PanelManager.search.webContents;
-        MainUtil.send(eventEmitter, 'data-update');
+    if (PanelManager.search && !PanelManager.search.isDestroyed()) {
+        const webContents = PanelManager.search.webContents;
+        MainUtil.send(webContents, 'data-update');
     }
 }
 
@@ -132,13 +131,13 @@ async function collectFiles() {
  * @returns {{ name: string, path: string, extname: string, similarity: number }[]}
  */
 function getMatchedFiles(keyword) {
-    const results = [];
     // 正则（每个关键字之间可以有任意个字符(.*)；不区分大小写(i)；懒惰模式(?)，匹配尽肯少的字符）
     const pattern = keyword.split('').join('.*?'),
         regExp = new RegExp(pattern, 'i');
     // 下面这行正则插入很炫酷，但是性能不好，耗时接近 split + join 的 10 倍
     // const pattern = keyword.replace(/(?<=.)(.)/g, '.*$1');
     // 查找并匹配
+    const results = [];
     if (caches) {
         // 从缓存中查找
         for (let i = 0, l = caches.length; i < l; i++) {
@@ -154,7 +153,6 @@ function getMatchedFiles(keyword) {
         // 排序（similarity 越小，匹配的长度越短，匹配度越高）
         results.sort((a, b) => a.similarity - b.similarity);
     }
-    // Done
     return results;
 }
 
@@ -224,8 +222,9 @@ module.exports = {
 
         /**
          * 打开搜索面板
+         * @param {*} event 
          */
-        'open-search-panel'() {
+        'open-search-panel'(event) {
             const options = {
                 /** 打开前 */
                 onBeforeOpen: () => {
@@ -234,8 +233,8 @@ module.exports = {
                 },
                 /** 关闭后 */
                 onClosed: () => {
-                    // 清空缓存
-                    caches = [];
+                    // 清除缓存
+                    caches = null;
                 },
             };
             PanelManager.openSearchBar(options);
@@ -243,15 +242,17 @@ module.exports = {
 
         /**
          * 打开设置面板
+         * @param {*} event 
          */
-        'open-settings-panel'() {
+        'open-settings-panel'(event) {
             PanelManager.openSettingsPanel();
         },
 
         /**
          * 检查更新
+         * @param {*} event 
          */
-        'menu-check-update'() {
+        'menu-check-update'(event) {
             checkUpdate(true);
         },
 

@@ -80,9 +80,11 @@ const App = {
             if (!curItem) {
                 if (keyword.value !== '') {
                     // 输入框文本错误动画
-                    const element = input.value;
-                    element.classList.add('input-error');
-                    setTimeout(() => element.classList.remove('input-error'), 500);
+                    const inputClasses = input.value.classList;
+                    inputClasses.add('input-error');
+                    setTimeout(() => {
+                        inputClasses.remove('input-error');
+                    }, 500);
                 }
             } else {
                 keyword.value = curItem.name;
@@ -286,7 +288,7 @@ const App = {
         onBeforeUnmount(() => {
             // 取消事件监听
             RendererUtil.removeAllListeners('data-update');
-            ipcRenderer.removeAllListeners('match-reply');
+            RendererUtil.removeAllListeners('match-reply');
         });
 
         return {

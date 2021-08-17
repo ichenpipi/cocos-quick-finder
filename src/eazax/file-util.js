@@ -5,7 +5,7 @@ const { promisify } = require('util');
 /**
  * 文件工具 (Promise 化)
  * @author ifaswind (陈皮皮)
- * @version 20210726
+ * @version 20210817
  */
 const FileUtil = {
 
@@ -101,6 +101,23 @@ const FileUtil = {
     },
 
     /**
+     * 创建文件夹 (递归)
+     * @param {Fs.PathLike} path 路径
+     */
+    async createDir(path) {
+        if (await FileUtil.exists(path)) {
+            return true;
+        } else {
+            const dir = Path.dirname(path);
+            if (await FileUtil.createDir(dir)) {
+                await FileUtil.mkdir(path);
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /**
      * 移除文件/文件夹 (递归)
      * @param {Fs.PathLike} path 路径
      */
@@ -112,10 +129,10 @@ const FileUtil = {
         if (stats.isDirectory()) {
             const names = await FileUtil.readdir(path);
             for (const name of names) {
-                FileUtil.remove(Path.join(path, name));
+                await FileUtil.remove(Path.join(path, name));
             }
             await FileUtil.rmdir(path);
-        } else if (stats.isFile()) {
+        } else {
             await FileUtil.unlink(path);
         }
     },

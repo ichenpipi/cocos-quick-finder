@@ -9,7 +9,7 @@ const PackageUtil = require('../../eazax/package-util');
 const LANG = getUrlParam('lang');
 
 // 导入 Vue 工具函数
-const { ref, watch, onMounted, onBeforeUnmount } = Vue;
+const { ref, watch, onMounted, onBeforeUnmount, createApp } = Vue;
 
 // 构建 Vue 应用
 const App = {
@@ -20,6 +20,7 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
+        // console.log('setup', props, context);
 
         // 预设快捷键
         const presets = ref([
@@ -137,6 +138,7 @@ const App = {
          * 生命周期：挂载后
          */
         onMounted(() => {
+            // console.log('onMounted');
             // 获取配置
             getConfig();
             // 覆盖 a 标签点击回调（使用默认浏览器打开网页）
@@ -175,6 +177,6 @@ const App = {
 };
 
 // 创建实例
-const app = Vue.createApp(App);
+const app = createApp(App);
 // 挂载
 app.mount('#app');

@@ -5,7 +5,7 @@ const { promisify } = require('util');
 /**
  * 文件工具 (Promise 化)
  * @author ifaswind (陈皮皮)
- * @version 20210817
+ * @version 20210818
  */
 const FileUtil = {
 
@@ -65,13 +65,6 @@ const FileUtil = {
     unlink: promisify(Fs.unlink),
 
     /**
-     * 测试路径是否存在
-     * @param {Fs.PathLike} path 路径
-     * @returns {Promise<boolean>}
-     */
-    exists: promisify(Fs.exists),
-
-    /**
      * 测试路径是否存在 (同步)
      * @param {Fs.PathLike} path 路径
      */
@@ -83,12 +76,12 @@ const FileUtil = {
      * @param {Fs.PathLike} destPath 目标路径
      */
     async copy(srcPath, destPath) {
-        if (!(await FileUtil.exists(srcPath))) {
+        if (!FileUtil.existsSync(srcPath)) {
             return;
         }
         const stats = await FileUtil.stat(srcPath);
         if (stats.isDirectory()) {
-            if (!(await FileUtil.exists(destPath))) {
+            if (!FileUtil.existsSync(destPath)) {
                 await FileUtil.mkdir(destPath);
             }
             const names = await FileUtil.readdir(srcPath);
@@ -105,7 +98,7 @@ const FileUtil = {
      * @param {Fs.PathLike} path 路径
      */
     async createDir(path) {
-        if (await FileUtil.exists(path)) {
+        if (FileUtil.existsSync(path)) {
             return true;
         } else {
             const dir = Path.dirname(path);
@@ -122,7 +115,7 @@ const FileUtil = {
      * @param {Fs.PathLike} path 路径
      */
     async remove(path) {
-        if (!(await FileUtil.exists(path))) {
+        if (!FileUtil.existsSync(path)) {
             return;
         }
         const stats = await FileUtil.stat(path);
@@ -143,7 +136,7 @@ const FileUtil = {
      * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void} handler 处理函数
      */
     async map(path, handler) {
-        if (!(await FileUtil.exists(path))) {
+        if (!FileUtil.existsSync(path)) {
             return;
         }
         const stats = await FileUtil.stat(path);

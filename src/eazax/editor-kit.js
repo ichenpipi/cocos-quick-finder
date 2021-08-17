@@ -16,14 +16,19 @@ function onCheckUpdateEvent(event, logWhatever) {
  * @param {'log' | 'info' | 'warn' | 'error' | any} type 
  * @param {any[]?} args 
  */
-function onPrintEvent(event, type, ...args) {
-    print(type, ...args);
+function onPrintEvent(event, type) {
+    // print(type, ...args);
+    const args = [type];
+    for (let i = 2, l = arguments.length; i < l; i++) {
+        args.push(arguments[i]);
+    }
+    print.apply(null, args);
 }
 
 /**
  * 编辑器套件（主进程）
  * @author ifaswind (陈皮皮)
- * @version 20210804
+ * @version 20210818
  */
 const EditorKit = {
 

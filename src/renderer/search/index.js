@@ -7,7 +7,7 @@ const { translate } = require('../../eazax/i18n');
 const LANG = getUrlParam('lang');
 
 // 导入 Vue 工具函数
-const { ref, onMounted, onBeforeUnmount, nextTick } = Vue;
+const { ref, onMounted, onBeforeUnmount, nextTick, createApp } = Vue;
 
 // 构建 Vue 应用
 const App = {
@@ -18,6 +18,7 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
+        // console.log('setup', props, context);
 
         // 当前选中的项目
         let curItem = null;
@@ -192,6 +193,7 @@ const App = {
          * @param {Electron.IpcRendererEvent} event 
          */
         function onDataUpdate(event) {
+            // console.log('onDataUpdate');
             // 触发文件搜索
             onInputChange(null);
         }
@@ -202,6 +204,7 @@ const App = {
          * @param {{ name: string, path: string, extname: string }[]} results 结果
          */
         function onMatchReply(event, results) {
+            // console.log('onMatchReply', results);
             // 清除已有数据
             items.value.length = 0;
             // 当只有一个结果时直接选中
@@ -273,6 +276,7 @@ const App = {
          * 生命周期：挂载后
          */
         onMounted(() => {
+            // console.log('onMounted');
             // 监听事件
             RendererUtil.on('data-update', onDataUpdate);
             RendererUtil.on('match-reply', onMatchReply);
@@ -314,7 +318,7 @@ const App = {
 };
 
 // 创建实例
-const app = Vue.createApp(App);
+const app = createApp(App);
 // 挂载
 app.mount('#app');
 

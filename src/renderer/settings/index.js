@@ -1,7 +1,7 @@
 const { shell } = require('electron');
 const { getUrlParam } = require('../../eazax/browser-util');
 const { translate } = require('../../eazax/i18n');
-const RendererUtil = require('../../eazax/renderer-util');
+const RendererEvent = require('../../eazax/renderer-event');
 const ConfigManager = require('../../common/config-manager');
 const PackageUtil = require('../../eazax/package-util');
 
@@ -100,13 +100,13 @@ const App = {
             if (selectKey.value === 'custom') {
                 // 自定义输入是否有效
                 if (customKey.value === '') {
-                    RendererUtil.print('warn', translate('customKeyError'));
+                    RendererEvent.print('warn', translate('customKeyError'));
                     return;
                 }
                 // 不可以使用双引号（避免 json 值中出现双引号而解析错误，导致插件加载失败）
                 if (customKey.value.includes('"')) {
                     customKey.value = customKey.value.replace(/\"/g, '');
-                    RendererUtil.print('warn', translate('quoteError'));
+                    RendererEvent.print('warn', translate('quoteError'));
                     return;
                 }
                 config.hotkey = customKey.value;
@@ -151,7 +151,7 @@ const App = {
                 });
             });
             // （主进程）检查更新
-            RendererUtil.send('check-update', false);
+            RendererEvent.send('check-update', false);
         });
 
         /**

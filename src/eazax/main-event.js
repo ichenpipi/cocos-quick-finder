@@ -9,7 +9,7 @@ const PACKAGE_NAME = PackageUtil.name;
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */
-const MainUtil = {
+const MainEvent = {
 
     /**
      * 监听事件（一次性）
@@ -78,4 +78,4 @@ const MainUtil = {
 
 };
 
-module.exports = MainUtil;
+module.exports = MainEvent;

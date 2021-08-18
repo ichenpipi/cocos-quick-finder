@@ -9,7 +9,7 @@ const PACKAGE_NAME = PackageUtil.name;
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */
-const RendererUtil = {
+const RendererEvent = {
 
     /**
      * 监听事件（一次性）
@@ -81,14 +81,14 @@ const RendererUtil = {
      * @param {any[]?} args 
      */
     print(type) {
-        // return RendererUtil.send('print', type, ...args);
+        // return RendererEvent.send('print', type, ...args);
         const args = ['print', type];
         for (let i = 1, l = arguments.length; i < l; i++) {
             args.push(arguments[i]);
         }
-        return RendererUtil.send.apply(RendererUtil, args);
+        return RendererEvent.send.apply(RendererEvent, args);
     },
 
 };
 
-module.exports = RendererUtil;
+module.exports = RendererEvent;

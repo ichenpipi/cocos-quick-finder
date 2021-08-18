@@ -1,4 +1,4 @@
-const RendererUtil = require('../../eazax/renderer-util');
+const RendererEvent = require('../../eazax/renderer-event');
 const { sep } = require('path');
 const { getUrlParam } = require('../../eazax/browser-util');
 const { translate } = require('../../eazax/i18n');
@@ -69,7 +69,7 @@ const App = {
                 return;
             }
             // 发消息给主进程进行关键词匹配
-            RendererUtil.send('match', keyword.value);
+            RendererEvent.send('match', keyword.value);
         }
 
         /**
@@ -89,7 +89,7 @@ const App = {
             } else {
                 keyword.value = curItem.name;
                 // 发消息给主进程
-                RendererUtil.send('open', curItem.path);
+                RendererEvent.send('open', curItem.path);
             }
             // 聚焦到输入框（此时焦点在按钮或列表上）
             focusOnInputField();
@@ -162,7 +162,7 @@ const App = {
             // 当前选中文件路径
             const path = curItem.path;
             // 发消息给主进程
-            RendererUtil.send('focus', path);
+            RendererEvent.send('focus', path);
         }
 
         /**
@@ -278,8 +278,8 @@ const App = {
         onMounted(() => {
             // console.log('onMounted');
             // 监听事件
-            RendererUtil.on('data-update', onDataUpdate);
-            RendererUtil.on('match-reply', onMatchReply);
+            RendererEvent.on('data-update', onDataUpdate);
+            RendererEvent.on('match-reply', onMatchReply);
             // 下一帧
             nextTick(() => {
                 // 聚焦到输入框
@@ -292,8 +292,8 @@ const App = {
          */
         onBeforeUnmount(() => {
             // 取消事件监听
-            RendererUtil.removeAllListeners('data-update');
-            RendererUtil.removeAllListeners('match-reply');
+            RendererEvent.removeAllListeners('data-update');
+            RendererEvent.removeAllListeners('match-reply');
         });
 
         return {

@@ -1,7 +1,7 @@
 const Path = require('path');
 const PanelManager = require('./panel-manager');
 const ConfigManager = require('../common/config-manager');
-const MainUtil = require('../eazax/main-util');
+const MainEvent = require('../eazax/main-event');
 const EditorKit = require('../eazax/editor-kit');
 const { checkUpdate } = require('../eazax/editor-util');
 const { map } = require('../eazax/file-util');
@@ -12,9 +12,9 @@ const { map } = require('../eazax/file-util');
 function load() {
     // 监听事件
     EditorKit.register();
-    MainUtil.on('match', onMatchEvent);
-    MainUtil.on('open', onOpenEvent);
-    MainUtil.on('focus', onFocusEvent);
+    MainEvent.on('match', onMatchEvent);
+    MainEvent.on('open', onOpenEvent);
+    MainEvent.on('focus', onFocusEvent);
     // 自动检查更新
     const config = ConfigManager.get();
     if (config.autoCheckUpdate) {
@@ -32,9 +32,9 @@ function unload() {
     PanelManager.closeSearchBar();
     // 取消事件监听
     EditorKit.unregister();
-    MainUtil.removeAllListeners('match');
-    MainUtil.removeAllListeners('open');
-    MainUtil.removeAllListeners('focus');
+    MainEvent.removeAllListeners('match');
+    MainEvent.removeAllListeners('open');
+    MainEvent.removeAllListeners('focus');
 }
 
 /**
@@ -47,10 +47,10 @@ function onMatchEvent(event, keyword) {
     const results = getMatchedFiles(keyword);
     // 返回结果给渲染进程
     if (event.reply) {
-        MainUtil.reply(event, 'match-reply', results);
+        MainEvent.reply(event, 'match-reply', results);
     } else {
         // 兼容低版本 electron
-        MainUtil.send(event.sender, 'match-reply', results);
+        MainEvent.send(event.sender, 'match-reply', results);
     }
 }
 
@@ -121,7 +121,7 @@ async function collectFiles() {
     // 发消息通知渲染进程（搜索栏）
     if (PanelManager.search && !PanelManager.search.isDestroyed()) {
         const webContents = PanelManager.search.webContents;
-        MainUtil.send(webContents, 'data-update');
+        MainEvent.send(webContents, 'data-update');
     }
 }
 

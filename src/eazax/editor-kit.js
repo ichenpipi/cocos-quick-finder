@@ -1,4 +1,4 @@
-const MainUtil = require('./main-util');
+const MainEvent = require('./main-event');
 const { print, checkUpdate } = require('./editor-util');
 
 /**
@@ -36,16 +36,16 @@ const EditorKit = {
      * 注册
      */
     register() {
-        MainUtil.on('check-update', onCheckUpdateEvent);
-        MainUtil.on('print', onPrintEvent);
+        MainEvent.on('check-update', onCheckUpdateEvent);
+        MainEvent.on('print', onPrintEvent);
     },
 
     /**
      * 取消注册
      */
     unregister() {
-        MainUtil.removeListener('check-update', onCheckUpdateEvent);
-        MainUtil.removeListener('print', onPrintEvent);
+        MainEvent.removeListener('check-update', onCheckUpdateEvent);
+        MainEvent.removeListener('print', onPrintEvent);
     },
 
 };

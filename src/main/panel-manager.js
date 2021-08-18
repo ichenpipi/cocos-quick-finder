@@ -1,6 +1,6 @@
 const { BrowserWindow } = require('electron');
 const { join } = require('path');
-const { language, translate } = require('../eazax/editor-util');
+const { language, translate } = require('../eazax/editor-main-util');
 const { calcWindowPosition } = require('../eazax/window-util');
 
 /** 扩展名称 */

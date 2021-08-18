@@ -2,8 +2,8 @@ const Path = require('path');
 const PanelManager = require('./panel-manager');
 const ConfigManager = require('../common/config-manager');
 const MainEvent = require('../eazax/main-event');
-const EditorKit = require('../eazax/editor-kit');
-const { checkUpdate } = require('../eazax/editor-util');
+const EditorMainKit = require('../eazax/editor-main-kit');
+const { checkUpdate } = require('../eazax/editor-main-util');
 const { map } = require('../eazax/file-util');
 
 /**
@@ -11,7 +11,7 @@ const { map } = require('../eazax/file-util');
  */
 function load() {
     // 监听事件
-    EditorKit.register();
+    EditorMainKit.register();
     MainEvent.on('match', onMatchEvent);
     MainEvent.on('open', onOpenEvent);
     MainEvent.on('focus', onFocusEvent);
@@ -31,7 +31,7 @@ function unload() {
     // 关闭搜索栏
     PanelManager.closeSearchBar();
     // 取消事件监听
-    EditorKit.unregister();
+    EditorMainKit.unregister();
     MainEvent.removeAllListeners('match');
     MainEvent.removeAllListeners('open');
     MainEvent.removeAllListeners('focus');
@@ -49,7 +49,7 @@ function onMatchEvent(event, keyword) {
     if (event.reply) {
         MainEvent.reply(event, 'match-reply', results);
     } else {
-        // 兼容低版本 electron
+        // 兼容 Electron 4.x 及以下版本
         MainEvent.send(event.sender, 'match-reply', results);
     }
 }

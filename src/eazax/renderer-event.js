@@ -5,7 +5,7 @@ const PackageUtil = require('./package-util');
 const PACKAGE_NAME = PackageUtil.name;
 
 /**
- * 渲染进程工具
+ * 渲染进程 IPC 事件
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */
@@ -73,20 +73,6 @@ const RendererEvent = {
             args.push(arguments[i]);
         }
         return ipcRenderer.sendSync.apply(ipcRenderer, args);
-    },
-
-    /**
-     * 打印信息到 Creator 编辑器控制台
-     * @param {'log' | 'info' | 'warn' | 'error' | any} type 
-     * @param {any[]?} args 
-     */
-    print(type) {
-        // return RendererEvent.send('print', type, ...args);
-        const args = ['print', type];
-        for (let i = 1, l = arguments.length; i < l; i++) {
-            args.push(arguments[i]);
-        }
-        return RendererEvent.send.apply(RendererEvent, args);
     },
 
 };

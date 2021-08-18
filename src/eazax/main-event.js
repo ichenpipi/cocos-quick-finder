@@ -5,7 +5,7 @@ const PackageUtil = require('./package-util');
 const PACKAGE_NAME = PackageUtil.name;
 
 /**
- * 主进程工具
+ * 主进程 IPC 事件
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */

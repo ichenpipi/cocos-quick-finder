@@ -1,5 +1,5 @@
 const MainEvent = require('./main-event');
-const { print, checkUpdate } = require('./editor-util');
+const { print, checkUpdate } = require('./editor-main-util');
 
 /**
  * （渲染进程）检查更新回调
@@ -26,11 +26,11 @@ function onPrintEvent(event, type) {
 }
 
 /**
- * 编辑器套件（主进程）
+ * 编辑器主进程套件 (依赖 Cocos Creator 编辑器)
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */
-const EditorKit = {
+const EditorMainKit = {
 
     /**
      * 注册
@@ -50,4 +50,4 @@ const EditorKit = {
 
 };
 
-module.exports = EditorKit;
+module.exports = EditorMainKit;

@@ -74,28 +74,31 @@ const FileUtil = {
      * 复制文件/文件夹
      * @param {Fs.PathLike} srcPath 源路径
      * @param {Fs.PathLike} destPath 目标路径
+     * @returns {Promise<boolean>}
      */
     async copy(srcPath, destPath) {
         if (!FileUtil.existsSync(srcPath)) {
-            return;
+            return false;
         }
         const stats = await FileUtil.stat(srcPath);
         if (stats.isDirectory()) {
             if (!FileUtil.existsSync(destPath)) {
-                await FileUtil.mkdir(destPath);
+                await FileUtil.createDir(destPath);
             }
             const names = await FileUtil.readdir(srcPath);
             for (const name of names) {
-                FileUtil.copy(Path.join(srcPath, name), Path.join(destPath, name));
+                await FileUtil.copy(Path.join(srcPath, name), Path.join(destPath, name));
             }
-        } else if (stats.isFile()) {
+        } else {
             await FileUtil.writeFile(destPath, await FileUtil.readFile(srcPath));
         }
+        return true;
     },
 
     /**
      * 创建文件夹 (递归)
      * @param {Fs.PathLike} path 路径
+     * @returns {Promise<boolean>}
      */
     async createDir(path) {
         if (FileUtil.existsSync(path)) {
@@ -133,20 +136,20 @@ const FileUtil = {
     /**
      * 遍历文件/文件夹并执行函数
      * @param {Fs.PathLike} path 路径
-     * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void} handler 处理函数
+     * @param {(filePath: Fs.PathLike, stat: Fs.Stats) => void | Promise<void>} handler 处理函数
      */
     async map(path, handler) {
         if (!FileUtil.existsSync(path)) {
             return;
         }
         const stats = await FileUtil.stat(path);
-        if (stats.isFile()) {
-            handler(path, stats);
-        } else {
+        if (stats.isDirectory()) {
             const names = await FileUtil.readdir(path);
             for (const name of names) {
                 await FileUtil.map(Path.join(path, name), handler);
             }
+        } else {
+           await handler(path, stats);
         }
     },
 

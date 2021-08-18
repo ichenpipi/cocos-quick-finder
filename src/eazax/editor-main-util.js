@@ -12,11 +12,11 @@ const PACKAGE_NAME = PackageUtil.name;
 const EXTENSION_NAME = I18n.translate(LANG, 'name');
 
 /**
- * 编辑器工具 (主进程)
+ * 编辑器主进程工具 (依赖 Cocos Creator 编辑器)
  * @author ifaswind (陈皮皮)
  * @version 20210818
  */
-const EditorUtil = {
+const EditorMainUtil = {
 
     /**
      * 语言
@@ -82,7 +82,7 @@ const EditorUtil = {
         // 是否有新版本
         const hasNewVersion = await Updater.check();
         // 打印到控制台
-        const { print, translate } = EditorUtil;
+        const { print, translate } = EditorMainUtil;
         if (hasNewVersion) {
             const remoteVersion = await Updater.getRemoteVersion();
             print('info', `${translate('hasNewVersion')}${remoteVersion}`);
@@ -95,4 +95,4 @@ const EditorUtil = {
 
 };
 
-module.exports = EditorUtil;
+module.exports = EditorMainUtil;

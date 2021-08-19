@@ -2,15 +2,15 @@ const { shell } = require('electron');
 const { getUrlParam } = require('../../eazax/browser-util');
 const { translate } = require('../../eazax/i18n');
 const RendererEvent = require('../../eazax/renderer-event');
-const ConfigManager = require('../../common/config-manager');
 const PackageUtil = require('../../eazax/package-util');
 const EditorRendererKit = require('../../eazax/editor-renderer-kit');
-
-/** 当前语言 */
-const LANG = getUrlParam('lang');
+const ConfigManager = require('../../common/config-manager');
 
 // 导入 Vue 工具函数
 const { ref, watch, onMounted, onBeforeUnmount, createApp } = Vue;
+
+/** 当前语言 */
+const LANG = getUrlParam('lang');
 
 // 构建 Vue 应用
 const App = {

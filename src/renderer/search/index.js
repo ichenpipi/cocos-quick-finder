@@ -1,13 +1,13 @@
-const RendererEvent = require('../../eazax/renderer-event');
 const { sep } = require('path');
 const { getUrlParam } = require('../../eazax/browser-util');
 const { translate } = require('../../eazax/i18n');
-
-/** 当前语言 */
-const LANG = getUrlParam('lang');
+const RendererEvent = require('../../eazax/renderer-event');
 
 // 导入 Vue 工具函数
 const { ref, onMounted, onBeforeUnmount, nextTick, createApp } = Vue;
+
+/** 当前语言 */
+const LANG = getUrlParam('lang');
 
 // 构建 Vue 应用
 const App = {

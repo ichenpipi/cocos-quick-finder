@@ -44,8 +44,9 @@ const ConfigManager = {
             configData.autoCheckUpdate = localConfig.autoCheckUpdate;
         }
         // 快捷键
-        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH));
-        configData.hotkey = packageData['main-menu'][MENU_ITEM_KEY]['accelerator'];
+        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
+            menuItem = packageData['main-menu'][MENU_ITEM_KEY];
+        configData.hotkey = menuItem['accelerator'] || '';
         // Done
         return configData;
     },

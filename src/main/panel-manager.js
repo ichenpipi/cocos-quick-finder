@@ -90,12 +90,12 @@ const PanelManager = {
     settings: null,
 
     /**
-     * 打开面板
+     * 打开设置面板
      */
     openSettingsPanel() {
-        // 已打开则关闭
+        // 已打开则直接展示
         if (PanelManager.settings) {
-            PanelManager.closeSettingsPanel();
+            PanelManager.settings.show();
             return;
         }
         // 窗口尺寸和位置（macOS 标题栏高 28px）
@@ -130,8 +130,6 @@ const PanelManager = {
         });
         // 就绪后（展示，避免闪烁）
         win.on('ready-to-show', () => win.show());
-        // 失焦后
-        win.on('blur', () => PanelManager.closeSettingPanel());
         // 关闭后
         win.on('closed', () => (PanelManager.settings = null));
         // 加载页面

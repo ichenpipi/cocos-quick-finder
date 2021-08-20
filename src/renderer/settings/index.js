@@ -78,8 +78,8 @@ const App = {
                 return;
             }
             // 预设快捷键
-            for (let i = 0, l = presets.length; i < l; i++) {
-                if (presets[i].key === hotkey) {
+            for (let i = 0, l = presets.value.length; i < l; i++) {
+                if (presets.value[i].key === hotkey) {
                     selectKey.value = hotkey;
                     customKey.value = '';
                     return;

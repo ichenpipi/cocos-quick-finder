@@ -1,6 +1,6 @@
 {
   "name": "ccc-quick-finder",
-  "version": "1.3.1.20210819",
+  "version": "1.3.2.20210821",
   "description": "快速搜索定位项目中的文件，还可以快速打开场景和预制体...",
   "author": {
     "name": "陈皮皮 (ifaswind)",
@@ -21,7 +21,7 @@
     },
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.settings": {
       "message": "ccc-quick-finder:open-settings-panel",
-      "icon": "/images/setting.png"
+      "icon": "/images/settings.png"
     },
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
       "message": "ccc-quick-finder:menu-check-update",

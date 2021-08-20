@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="../../eazax/css/cocos-tag.css">
+    <link rel="stylesheet" type="text/css" href="../../eazax/css/cocos-class.css">
     <link rel="stylesheet" type="text/css" href="index.css">
     <!-- 脚本 -->
     <script type="text/javascript" src="../../../lib/vue.global.prod.js" defer></script>
@@ -12,13 +14,15 @@
 
 <body>
     <div id="app" v-cloak>
-        <div class="title">{{ titleLabel }}</div>
-        <div class="container">
-            <!-- 选择 -->
+        <!-- 标题 -->
+        <div class="title">{{ t('settings') }}</div>
+        <!-- 配置 -->
+        <div class="properties">
+            <!-- 选择快捷键 -->
             <div class="property">
                 <div class="label">
-                    <span class="text">{{ selectLabel }}</span>
-                    <span class="tooltip">{{ selectTooltipLabel }}</span>
+                    <span class="text">{{ t('selectKey') }}</span>
+                    <span class="tooltip">{{ t('selectKeyTooltip') }}</span>
                 </div>
                 <div class="content">
                     <select v-model="selectKey">
@@ -26,21 +30,21 @@
                     </select>
                 </div>
             </div>
-            <!-- 自定义 -->
+            <!-- 自定义快捷键 -->
             <div class="property">
                 <div class="label">
-                    <span class="text">{{ customLabel }}</span>
-                    <span class="tooltip">{{ customTooltipLabel }}</span>
+                    <span class="text">{{ t('customKey') }}</span>
+                    <span class="tooltip">{{ t('customKeyTooltip') }}</span>
                 </div>
                 <div class="content">
-                    <input v-model="customKey" :placeholder="customPlaceholderLabel" />
+                    <input v-model="customKey" :placeholder="t('customKeyPlaceholder')" />
                 </div>
             </div>
             <!-- 自动检查更新 -->
             <div class="property">
                 <div class="label">
-                    <span class="text">{{ autoCheckLabel }}</span>
-                    <span class="tooltip">{{ autoCheckTooltipLabel }}</span>
+                    <span class="text">{{ t('autoCheck') }}</span>
+                    <span class="tooltip">{{ t('autoCheckTooltip') }}</span>
                 </div>
                 <div class="content">
                     <input type="checkbox" v-model="autoCheckUpdate" />
@@ -48,17 +52,17 @@
             </div>
             <!-- 快捷键参考 -->
             <div class="tip">
-                <span>{{ referenceLabel }}</span>
-                <a href="https://www.electronjs.org/docs/api/accelerator" target="_blank">{{ acceleratorLabel }}</a>
+                <span>{{ t('reference') }}</span>
+                <a href="https://www.electronjs.org/docs/api/accelerator" target="_blank">{{ t('accelerator') }}</a>
             </div>
             <!-- Git 仓库 -->
             <div class="tip">
-                <span>{{ repositoryLabel }}</span>
-                <a href="https://gitee.com/ifaswind/ccc-quick-finder" target="_blank">ccc-quick-finder</a>
+                <span>{{ t('repository') }}</span>
+                <a :href="repositoryUrl" target="_blank">{{ packageName }}</a>
             </div>
             <div class="line"></div>
             <!-- 应用按钮 -->
-            <button class="apply-btn" @click="onApplyBtnClick">{{ applyLabel }}</button>
+            <button class="apply-btn" @click="onApplyBtnClick">{{ t('apply') }}</button>
         </div>
     </div>
 </body>

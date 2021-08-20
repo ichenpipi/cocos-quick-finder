@@ -1,16 +1,20 @@
 module.exports = {
     'name': 'Quick Finder',
     'search': '搜索',
-    'setting': '设置',
+    'settings': '设置',
     'checkUpdate': '检查更新',
+    // update
+    'currentLatest': '当前已是最新版本！',
+    'hasNewVersion': '发现新版本：',
+    'releases': '发行版：https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    'cocosStore': 'Cocos 商店：http://store.cocos.com/app/detail/2745',
     // main
     'dataError': '资源数据加载失败，请关闭搜索栏后重试！',
-    'hasNewVersion': '发现新版本！请看：https://gitee.com/ifaswind/ccc-quick-finder/releases',
-    'currentLatest': '当前已是最新版本！',
-    // search bar
+    // search
     'searchPlaceholder': '请输入文件名称...',
     'searchBtn': 'GO',
-    // setting panel
+    // settings
+    'none': '无',
     'selectKey': '快捷键',
     'selectKeyTooltip': '选择一个快速打开搜索栏的快捷键',
     'customKey': '自定义',

@@ -1,16 +1,20 @@
 module.exports = {
     'name': 'Quick Finder',
     'search': 'Search',
-    'setting': 'Setting',
+    'settings': 'Settings',
     'checkUpdate': 'Check Update',
+    // update
+    'currentLatest': 'Currently the latest version!',
+    'hasNewVersion': 'New version found: ',
+    'releases': 'Releases: https://gitee.com/ifaswind/ccc-quick-finder/releases',
+    'cocosStore': 'Cocos Store: http://store.cocos.com/app/detail/2745',
     // main
     'dataError': 'Load assets data failed, please reopen the search bar and try again!',
-    'hasNewVersion': 'New version found! See: https://gitee.com/ifaswind/ccc-quick-finder/releases',
-    'currentLatest': 'Currently the latest version!',
-    // search bar
+    // search
     'searchPlaceholder': 'Enter file name...',
     'searchBtn': 'GO',
-    // setting panel
+    // setting
+    'none': 'None',
     'selectKey': 'Hotkey',
     'selectKeyTooltip': 'Chose a hotkey to open the search bar quickly',
     'customKey': 'Custom',

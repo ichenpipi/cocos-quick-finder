@@ -3,7 +3,7 @@ const EditorMainKit = require('../eazax/editor-main-kit');
 const { checkUpdate } = require('../eazax/editor-main-util');
 const ConfigManager = require('../common/config-manager');
 const Finder = require('./finder');
-const Operator = require('./operator');
+const Opener = require('./opener');
 const PanelManager = require('./panel-manager');
 
 /**
@@ -61,7 +61,7 @@ function onMatchEvent(event, keyword) {
  */
 function onOpenEvent(event, path) {
     // 打开文件
-    Operator.openFile(path);
+    Opener.openFile(path);
     // 关闭搜索栏
     PanelManager.closeSearchBar();
 }
@@ -74,7 +74,7 @@ function onOpenEvent(event, path) {
 function onFocusEvent(event, path) {
     // 在资源管理器中显示并选中文件
     const uuid = Editor.assetdb.fspathToUuid(path);
-    Operator.focusOnFile(uuid);
+    Opener.focusOnFile(uuid);
 }
 
 /**

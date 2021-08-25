@@ -1,9 +1,9 @@
 const Path = require('path');
 
 /**
- * 文件操作器
+ * 文件打开器
  */
-const Operator = {
+const Opener = {
 
     /**
      * 打开文件
@@ -16,15 +16,15 @@ const Operator = {
         switch (extname) {
             case '.fire':
                 // 打开场景
-                Operator.openScene(uuid);
+                Opener.openScene(uuid);
                 break;
             case '.prefab':
                 // 打开预制体
-                Operator.openPrefab(uuid);
+                Opener.openPrefab(uuid);
                 break;
             default:
                 // 聚焦到文件
-                Operator.focusOnFile(uuid);
+                Opener.focusOnFile(uuid);
                 break;
         }
     },
@@ -37,7 +37,7 @@ const Operator = {
         // 打开
         Editor.Panel.open('scene', { uuid });
         // 聚焦
-        setTimeout(() => Operator.focusOnFile(uuid));
+        setTimeout(() => Opener.focusOnFile(uuid));
     },
 
     /**
@@ -48,7 +48,7 @@ const Operator = {
         // 打开
         Editor.Ipc.sendToAll('scene:enter-prefab-edit-mode', uuid);
         // 聚焦
-        setTimeout(() => Operator.focusOnFile(uuid));
+        setTimeout(() => Opener.focusOnFile(uuid));
     },
 
     /**
@@ -62,4 +62,4 @@ const Operator = {
 
 };
 
-module.exports = Operator;
+module.exports = Opener;

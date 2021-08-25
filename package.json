@@ -15,7 +15,7 @@
   "main": "src/main/index.js",
   "main-menu": {
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.search": {
-      "message": "ccc-quick-finder:open-search-panel",
+      "message": "ccc-quick-finder:open-search-bar",
       "icon": "/images/search.png",
       "accelerator": "F1"
     },

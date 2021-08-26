@@ -4,9 +4,9 @@
 
 [Cocos Creator Editor Extension]
 
-**Press the hotkey to open the search bar, enter the file name then you can locate the file immediately, for scenes or prefabs you can open it directly.**
+**Press the hotkey to open the search bar, enter the file name then you can open or locate the file immediately.**
 
-> ⚠ Attention
+> 🎭 Attention
 >
 > Current branch is for **Cocos Creator 3.x**, if you're looking for **Cocos Creator 2.x** version ,please switch to branch `master`, Click [here](https://gitee.com/ifaswind/ccc-quick-finder/tree/master/) to switch branch immediately.
 
@@ -81,7 +81,7 @@ For example, on my Windows computer, the full path of `main.js` file should be `
 
 3. Scroll the mouse wheel to scroll through the list; press the `Up Arrow` or `Down Arrow` to select file; press the `Left Arrow` or `Right Arrow` to locate the current selected file in Assets Panel.
 
-4. Find and select your target file, click on it or press `Enter` to open(only for scenes and prefabs) or locate it in Assets Panel(for other files).
+4. Find and select your target file, click on it or press `Enter` to open it.
 
 And then, click on anywhere outside the search bar or press `ESC` to close the search bar.
 

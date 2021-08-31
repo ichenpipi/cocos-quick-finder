@@ -30,7 +30,7 @@ const PanelManager = {
         // 收集项目中的文件信息
         options.onBeforeOpen();
         // 窗口尺寸和位置（macOS 标题栏高 28px）
-        const winSize = [500, 600],
+        const winSize = [550, 600],
             winPos = calcWindowPosition(winSize, 'top');
         // 创建窗口
         const win = PanelManager.search = new BrowserWindow({

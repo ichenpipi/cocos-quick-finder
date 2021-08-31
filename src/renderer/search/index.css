@@ -23,13 +23,18 @@ body {
   width: 100%;
   height: 100%;
   padding: 15px 0 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 搜索 */
 .search {
-  width: 100%;
+  width: 500px;
   height: 50px;
   display: inline-flex;
+  border-radius: 8px;
+  box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
 }
 
 /* 输入框 */
@@ -103,6 +108,7 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-sizing: border-box;
+  box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
   user-select: none;
 }
 

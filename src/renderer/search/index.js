@@ -63,8 +63,8 @@ const App = {
             // 取消当前选中
             curItem = null;
             curIndex.value = -1;
-            // 关键字为空或无效时不进行搜索
-            if (keyword.value === '' || keyword.value.includes('...')) {
+            // 关键字为空时不进行搜索
+            if (keyword.value === '') {
                 items.value.length = 0;
                 return;
             }

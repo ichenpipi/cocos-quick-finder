@@ -64,8 +64,18 @@ const Finder = {
      * @returns {{ name: string, path: string, extname: string, similarity: number }[]}
      */
     getMatchedFiles(keyword) {
-        // 正则（每个关键字之间可以有任意个字符(.*)；不区分大小写(i)；懒惰模式(?)，匹配尽肯少的字符）
-        const pattern = keyword.split('').join('.*?'),
+        // 处理正则公式符号
+        const components = keyword.split('');
+        for (let i = 0, l = components.length; i < l; i++) {
+            if (/[*.?+$^()\[\]{}|\\\/]/.test(components[i])) {
+                components[i] = '\\' + components[i];
+            }
+        }
+        // 正则匹配
+        // - (.*)：每个关键字之间可以有任意个字符；
+        // - (?)：懒惰模式，匹配尽可能少的字符；
+        // - (i)：不区分大小写；
+        const pattern = components.join('.*?'),
             regExp = new RegExp(pattern, 'i');
         // 下面这行正则插入很炫酷，但是性能不好，耗时接近 split + join 的 10 倍
         // const pattern = keyword.replace(/(?<=.)(.)/g, '.*$1');

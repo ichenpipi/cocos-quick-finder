@@ -12,30 +12,33 @@
 
 <body>
     <div id="app" v-cloak>
-        <!-- 搜索 -->
-        <div class="search">
-            <!-- 输入框 -->
-            <input ref="input" class="input" type="text" v-model="keyword" :placeholder="t('searchPlaceholder')"
-                @input="onInputChange" @keydown.enter="onEnterBtnClick" @keydown.up="onUpBtnClick"
-                @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick" @keydown.right="onRightBtnClick"
-                spellcheck="false" autofocus />
-            <!-- 按钮 -->
-            <button class="btn" v-text="t('searchBtn')" @click="onEnterBtnClick"></button>
-        </div>
-        <!-- 结果列表 -->
-        <div class="result" v-if="items.length > 0">
-            <ul class="list">
-                <li class="item" v-for="(item, index) in items" :key="index" :id="'item-' + index"
-                    @click="onItemClick(item, index)" :selected="index === curIndex">
-                    <div class="info">
-                        <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
-                        <span class="name">{{ item.name }}</span>
-                    </div>
-                    <div class="detail">
-                        <span class="path">{{ getPath(item.path) }}</span>
-                    </div>
-                </li>
-            </ul>
+        <!-- 布局 -->
+        <div class="layout">
+            <!-- 搜索 -->
+            <div class="search">
+                <!-- 输入框 -->
+                <input ref="input" class="input" type="text" v-model="keyword" :placeholder="t('searchPlaceholder')"
+                    @input="onInputChange" @keydown.enter="onEnterBtnClick" @keydown.up="onUpBtnClick"
+                    @keydown.down="onDownBtnClick" @keydown.left="onLeftBtnClick" @keydown.right="onRightBtnClick"
+                    spellcheck="false" autofocus />
+                <!-- 按钮 -->
+                <button class="btn" v-text="t('searchBtn')" @click="onEnterBtnClick"></button>
+            </div>
+            <!-- 结果列表 -->
+            <div class="result" v-if="items.length > 0">
+                <ul class="list">
+                    <li class="item" v-for="(item, index) in items" :key="index" :id="'item-' + index"
+                        @click="onItemClick(item, index)" :selected="index === curIndex">
+                        <div class="info">
+                            <img class="icon" :src="getIcon(item.extname)" alt="icon"></img>
+                            <span class="name">{{ item.name }}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="path">{{ getPath(item.path) }}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </body>

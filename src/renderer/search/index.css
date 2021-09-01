@@ -28,6 +28,11 @@ body {
   align-items: center;
 }
 
+/* 布局 */
+.layout {
+  width: 500px;
+}
+
 /* 搜索 */
 .search {
   width: 500px;
@@ -102,6 +107,8 @@ body {
 
 /* 结果 */
 .result {
+  /* 这里需要将定位设为非 static，否则会被搜索栏的 box-shadow 遮挡 */
+  position: relative;
   width: 500px;
   margin: 5px 0 0 0;
   background-color: var(--main-color);

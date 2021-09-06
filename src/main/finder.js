@@ -34,7 +34,7 @@ const Finder = {
             }
         }
         // 遍历项目文件
-        const assetsPath = Editor.url('db://assets/');
+        const assetsPath = Path.join(Editor.Project.path, 'assets');
         await map(assetsPath, handler);
     },
 
@@ -50,10 +50,6 @@ const Finder = {
         if (extname === '.meta' || extname === '') {
             return false;
         }
-        // 只要场景和预制体
-        // if (extname !== '.fire' && extname !== '.prefab') {
-        //   return false;
-        // }
         // 可用
         return true;
     },

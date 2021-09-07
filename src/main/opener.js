@@ -19,8 +19,8 @@ const Opener = {
      * 打开文件
      * @param {string} path 路径
      */
-    async openFile(path) {
-        const uuid = await Editor.Message.request('asset-db', 'query-uuid', path);
+    async open(path) {
+        const uuid = await Opener.fspathToUuid(path);
         // 聚焦
         Opener.focusOnFile(uuid);
         // 打开
@@ -34,9 +34,18 @@ const Opener = {
      * 聚焦到文件（在资源管理器中显示并选中文件）
      * @param {string} uuid uuid
      */
-    async focusOnFile(uuid) {
+    focusOnFile(uuid) {
         Editor.Selection.clear('asset');
         Editor.Selection.select('asset', [uuid]);
+    },
+
+    /**
+     * 通过绝对路径获取 uuid
+     * @param {string} path 路径
+     * @returns {Promise<string>}
+     */
+    fspathToUuid(path) {
+        return Editor.Message.request('asset-db', 'query-uuid', path);
     },
 
 };

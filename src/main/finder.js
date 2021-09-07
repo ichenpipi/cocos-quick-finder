@@ -50,10 +50,6 @@ const Finder = {
         if (extname === '.meta' || extname === '') {
             return false;
         }
-        // 只要场景和预制体
-        // if (extname !== '.fire' && extname !== '.prefab') {
-        //   return false;
-        // }
         // 可用
         return true;
     },

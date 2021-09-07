@@ -61,7 +61,7 @@ function onMatchEvent(event, keyword) {
  */
 function onOpenEvent(event, path) {
     // 打开文件
-    Opener.openFile(path);
+    Opener.open(path);
     // 关闭搜索栏
     PanelManager.closeSearchBar();
 }
@@ -73,7 +73,7 @@ function onOpenEvent(event, path) {
  */
 async function onFocusEvent(event, path) {
     // 在资源管理器中显示并选中文件
-    const uuid = await Editor.Message.request('asset-db', 'query-uuid', path);
+    const uuid = await Opener.fspathToUuid(path);
     Opener.focusOnFile(uuid);
 }
 

@@ -1,6 +1,7 @@
 const MainEvent = require('../eazax/main-event');
 const EditorMainKit = require('../eazax/editor-main-kit');
 const { checkUpdate } = require('../eazax/editor-main-util');
+const { openRepository } = require('../eazax/package-util');
 const ConfigManager = require('../common/config-manager');
 const Finder = require('./finder');
 const Opener = require('./opener');
@@ -15,13 +16,6 @@ function load() {
     MainEvent.on('match', onMatchEvent);
     MainEvent.on('open', onOpenEvent);
     MainEvent.on('focus', onFocusEvent);
-    // 自动检查更新
-    const config = ConfigManager.get();
-    if (config.autoCheckUpdate) {
-        // 延迟一段时间
-        const delay = 6 * 60 * 1000;
-        setTimeout(() => checkUpdate(false), delay);
-    }
 }
 
 /**
@@ -130,6 +124,26 @@ module.exports = {
          */
         'menu-check-update'(event) {
             checkUpdate(true);
+        },
+
+        /**
+         * 版本
+         * @param {*} event 
+         */
+        'menu-version'(event) {
+            openRepository();
+        },
+
+        /**
+         * 场景面板加载完成后
+         * @param {*} event 
+         */
+        'scene:ready'(event) {
+            // 自动检查更新
+            const config = ConfigManager.get();
+            if (config.autoCheckUpdate) {
+                checkUpdate(false);
+            }
         },
 
     },

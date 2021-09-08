@@ -26,6 +26,10 @@
     "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/i18n:ccc-quick-finder.checkUpdate": {
       "message": "ccc-quick-finder:menu-check-update",
       "icon": "/images/update.png"
+    },
+    "i18n:MAIN_MENU.package.title/i18n:ccc-quick-finder.name/v1.3.3.20210826": {
+      "message": "ccc-quick-finder:menu-version",
+      "icon": "/images/version.png"
     }
   },
   "reload": {

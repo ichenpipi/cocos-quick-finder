@@ -33,7 +33,7 @@ const App = {
             { ext: '.txt', type: t('txt') },
         ]);
         // 可以直接打开的文件类型列表
-        const openable = ref(['.fire', '.prefab']);
+        const openable = ref([]);
 
         // 预设快捷键
         const presets = ref([

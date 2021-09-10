@@ -18,6 +18,22 @@
         <div class="title">{{ t('settings') }}</div>
         <!-- 配置 -->
         <div class="properties">
+            <!-- 文件类型 -->
+            <div class="property">
+                <div class="label">
+                    <span class="text">{{ t('openable') }}</span>
+                    <span class="tooltip">{{ t('openableTooltip') }}</span>
+                </div>
+                <div class="content">
+                    <div class="openable">
+                        <div class="item" v-for="(item, index) in OPENABLE_LIST" :key="index">
+                            <input class="checkbox" type="checkbox" :checked="openable.indexOf(item.ext) !== -1"
+                                @change="onOpenableChanged($event, item)" />
+                            <div class="type">{{ `${item.type} (${item.ext})` }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- 选择快捷键 -->
             <div class="property">
                 <div class="label">

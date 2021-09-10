@@ -1,11 +1,16 @@
 const Path = require('path');
 const Fs = require('fs');
 
+/** 配置文件路径 */
+const CONFIG_PATH = Path.join(__dirname, '../../config.json');
+
 /** package.json 的路径 */
 const PACKAGE_PATH = Path.join(__dirname, '../../package.json');
 
-/** 配置文件路径 */
-const CONFIG_PATH = Path.join(__dirname, '../../config.json');
+/**
+ * 配置缓存
+ */
+let configCache = null;
 
 /**
  * 配置管理器
@@ -13,54 +18,95 @@ const CONFIG_PATH = Path.join(__dirname, '../../config.json');
 const ConfigManager = {
 
     /**
+     * 配置缓存
+     */
+    get cache() {
+        if (!configCache) {
+            ConfigManager.get();
+        }
+        return configCache;
+    },
+
+    /**
      * 默认配置
      */
     get defaultConfig() {
         return {
-            version: '1.0',
+            version: '1.1',
+            openable: ['.scene', '.prefab'],
             autoCheckUpdate: true,
         };
     },
 
     /**
      * 读取配置
-     * @returns {{ hotkey: string, autoCheckUpdate: boolean }}
      */
     get() {
-        const configData = ConfigManager.defaultConfig;
+        const config = ConfigManager.defaultConfig;
         // 配置
         if (Fs.existsSync(CONFIG_PATH)) {
             const localConfig = JSON.parse(Fs.readFileSync(CONFIG_PATH));
-            configData.autoCheckUpdate = localConfig.autoCheckUpdate;
+            for (const key in config) {
+                if (localConfig[key] !== undefined) {
+                    config[key] = localConfig[key];
+                }
+            }
         }
+        // 缓存起来
+        configCache = JSON.parse(JSON.stringify(config));
+
         // 快捷键
-        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
-            menuItem = packageData['contributions']['shortcuts'][0];
-        configData.hotkey = menuItem['win'] || '';
+        config.hotkey = ConfigManager.getAccelerator();
+
         // Done
-        return configData;
+        return config;
     },
 
     /**
      * 保存配置
-     * @param {{ hotkey: string, autoCheckUpdate: boolean }} config 配置
+     * @param {*} value 配置
      */
-    set(config) {
-        const configData = ConfigManager.defaultConfig;
+    set(value) {
+        const config = ConfigManager.defaultConfig;
         // 配置
-        configData.autoCheckUpdate = config.autoCheckUpdate;
-        Fs.writeFileSync(CONFIG_PATH, JSON.stringify(configData, null, 2));
-        // 快捷键
-        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
-            menuItem = packageData['contributions']['shortcuts'][0];
-        if (config.hotkey && config.hotkey !== '') {
-            menuItem['win'] = config.hotkey;
-            menuItem['mac'] = config.hotkey;
-        } else {
-            menuItem['win'] = '';
-            menuItem['mac'] = '';
+        for (const key in config) {
+            if (value[key] !== undefined) {
+                config[key] = value[key];
+            }
         }
-        Fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageData, null, 2));
+        Fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+        // 缓存起来
+        configCache = JSON.parse(JSON.stringify(config));
+
+        // 快捷键
+        ConfigManager.setAccelerator(value.hotkey);
+    },
+
+    /**
+     * 获取快捷键
+     * @returns {string}
+     */
+    getAccelerator() {
+        const package = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
+            item = package['contributions']['shortcuts'][0];
+        return item['win'] || '';
+    },
+
+    /**
+     * 设置快捷键
+     * @param {string} value 
+     */
+    setAccelerator(value) {
+        const package = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
+            item = package['contributions']['shortcuts'][0];
+        if (value != undefined && value !== '') {
+            item['win'] = value;
+            item['mac'] = value;
+        } else {
+            item['win'] = '';
+            item['mac'] = '';
+        }
+        Fs.writeFileSync(PACKAGE_PATH, JSON.stringify(package, null, 2));
     },
 
 };

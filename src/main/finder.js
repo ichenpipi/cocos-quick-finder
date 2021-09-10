@@ -34,7 +34,7 @@ const Finder = {
             }
         }
         // 遍历项目文件
-        const assetsPath = Path.join(Editor.Project.path, 'assets/');
+        const assetsPath = Path.join(Editor.Project.path, 'assets');
         await map(assetsPath, handler);
     },
 

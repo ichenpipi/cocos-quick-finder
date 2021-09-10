@@ -5,7 +5,9 @@ module.exports = {
     'checkUpdate': 'Check Update',
     // update
     'currentLatest': 'Currently the latest version!',
-    'hasNewVersion': 'New version found: ',
+    'hasNewVersion': 'New version found!',
+    'localVersion': 'Local version: ',
+    'latestVersion': 'Latest version: ',
     'releases': 'Releases: https://gitee.com/ifaswind/ccc-quick-finder/releases',
     'cocosStore': 'Cocos Store: http://store.cocos.com/app/detail/2745',
     // main
@@ -14,6 +16,15 @@ module.exports = {
     'searchPlaceholder': 'Enter file name...',
     'searchBtn': 'GO',
     // setting
+    'openable': 'Openable File Types',
+    'openableTooltip': 'Types of file that can be open via search bar.',
+    'scene': 'Scene',
+    'prefab': 'Prefab',
+    'typescript': 'TypeScript',
+    'javascript': 'JavaScript',
+    'json': 'JSON',
+    'markdown': 'Markdown',
+    'txt': 'Txt',
     'none': 'None',
     'selectKey': 'Hotkey',
     'selectKeyTooltip': 'Chose a hotkey to open the search bar quickly',

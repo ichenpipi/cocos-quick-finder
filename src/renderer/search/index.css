@@ -13,6 +13,10 @@
   --error-color: #ff3030;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -26,6 +30,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* 布局 */
+.layout {
+  width: 500px;
 }
 
 /* 搜索 */
@@ -45,7 +54,6 @@ body {
   border: 1px solid var(--border-color);
   border-right: none;
   border-radius: 8px 0 0 8px;
-  box-sizing: border-box;
   color: var(--font-color);
   font-size: 20px;
   user-select: none;
@@ -82,7 +90,6 @@ body {
   background-color: var(--accent-color);
   border: none;
   border-radius: 0 8px 8px 0;
-  box-sizing: border-box;
   color: var(--main-color);
   font-size: 20px;
   user-select: none;
@@ -102,12 +109,13 @@ body {
 
 /* 结果 */
 .result {
+  /* 这里需要将定位设为非 static，否则会被搜索栏的 box-shadow 遮挡 */
+  position: relative;
   width: 500px;
   margin: 5px 0 0 0;
   background-color: var(--main-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-sizing: border-box;
   box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
   user-select: none;
 }
@@ -151,7 +159,6 @@ body {
   min-height: 30px;
   line-height: 20px;
   padding: 5px 10px;
-  box-sizing: border-box;
   color: var(--font-color);
   list-style: none;
 }

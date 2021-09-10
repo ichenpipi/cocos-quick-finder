@@ -6,26 +6,20 @@ const ConfigManager = require('../common/config-manager');
 const Finder = require('./finder');
 const Opener = require('./opener');
 const PanelManager = require('./panel-manager');
+const { openRepository } = require('../eazax/package-util');
 
 /**
  * 生命周期：加载
  */
 function load() {
+    // 设置仓库分支
+    Updater.branch = 'ccc-v3';
     // 监听事件
     EditorMainKit.register();
     MainEvent.on('match', onMatchEvent);
     MainEvent.on('open', onOpenEvent);
     MainEvent.on('focus', onFocusEvent);
     MainEvent.on('reload', onReloadEvent);
-    // 设置仓库分支
-    Updater.branch = 'ccc-v3';
-    // 自动检查更新
-    const config = ConfigManager.get();
-    if (config.autoCheckUpdate) {
-        // 延迟一段时间
-        const delay = 6 * 60 * 1000;
-        setTimeout(() => checkUpdate(false), delay);
-    }
 }
 
 /**
@@ -61,7 +55,7 @@ function onMatchEvent(event, keyword) {
  */
 function onOpenEvent(event, path) {
     // 打开文件
-    Opener.open(path);
+    Opener.tryOpen(path);
     // 关闭搜索栏
     PanelManager.closeSearchBar();
 }
@@ -134,6 +128,24 @@ exports.methods = {
      */
     menuCheckUpdate() {
         checkUpdate(true);
+    },
+
+    /**
+     * 版本号
+     */
+    menuVersion() {
+        openRepository();
+    },
+
+    /**
+     * 场景编辑器就绪后
+     */
+    onSceneReady() {
+        // 自动检查更新
+        const config = ConfigManager.get();
+        if (config.autoCheckUpdate) {
+            checkUpdate(false);
+        }
     },
 
 };

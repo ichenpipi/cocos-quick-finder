@@ -18,10 +18,7 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
-        // console.log('setup', props, context);
 
-        // 当前选中的项目
-        let curItem = null;
         // 分帧加载定时器
         let loadHandler = null;
 
@@ -39,10 +36,8 @@ const App = {
          * 更新当前的选择
          */
         function updateSelected() {
-            // 储存
-            curItem = items.value[curIndex.value];
-            // 输入框的文本
-            keyword.value = curItem.name;
+            // 更新输入框的文本
+            keyword.value = items.value[curIndex.value].name;
             // 只有当目标元素不在可视区域内才滚动
             nextTick(() => {
                 const id = `item-${curIndex.value}`;
@@ -61,7 +56,6 @@ const App = {
                 loadHandler = null;
             }
             // 取消当前选中
-            curItem = null;
             curIndex.value = -1;
             // 关键字为空时不进行搜索
             if (keyword.value === '') {
@@ -77,7 +71,7 @@ const App = {
          * @param {*} event 
          */
         function onEnterBtnClick(event) {
-            if (!curItem) {
+            if (curIndex.value === -1) {
                 if (keyword.value !== '') {
                     // 输入框文本错误动画
                     const inputClasses = input.value.classList;
@@ -87,9 +81,11 @@ const App = {
                     }, 500);
                 }
             } else {
-                keyword.value = curItem.name;
+                const item = items.value[curIndex.value];
+                // 更新输入框文本
+                keyword.value = item.name;
                 // 发消息给主进程
-                RendererEvent.send('open', curItem.path);
+                RendererEvent.send('open', item.path);
             }
             // 聚焦到输入框（此时焦点在按钮或列表上）
             focusOnInputField();
@@ -135,7 +131,9 @@ const App = {
          */
         function onLeftBtnClick(event) {
             // 是否已选中项目
-            if (!curItem) return;
+            if (curIndex.value === -1) {
+                return;
+            }
             // 阻止默认事件（光标移动）
             event.preventDefault();
             // 在资源管理器中显示并选中文件
@@ -148,7 +146,9 @@ const App = {
          */
         function onRightBtnClick(event) {
             // 是否已选中项目
-            if (!curItem) return;
+            if (curIndex.value === -1) {
+                return;
+            }
             // 阻止默认事件（光标移动）
             event.preventDefault();
             // 在资源管理器中显示并选中文件
@@ -159,10 +159,10 @@ const App = {
          * 在资源管理器中显示并选中文件
          */
         function focusOnFileInAssets() {
-            // 当前选中文件路径
-            const path = curItem.path;
+            // 当前选中项目
+            const item = items.value[curIndex.value];
             // 发消息给主进程
-            RendererEvent.send('focus', path);
+            RendererEvent.send('focus', item.path);
         }
 
         /**
@@ -172,7 +172,6 @@ const App = {
          */
         function onItemClick(item, index) {
             curIndex.value = parseInt(index);
-            curItem = item;
             keyword.value = item.name;
             // 添加组件
             onEnterBtnClick(null);
@@ -211,7 +210,6 @@ const App = {
             if (results.length === 1) {
                 items.value = results;
                 curIndex.value = 0;
-                curItem = results[0];
                 return;
             }
             // 结果数量多时分段加载
@@ -238,10 +236,10 @@ const App = {
                 }
                 // 开始加载
                 load();
-                return;
+            } else {
+                // 数量不多，更新结果列表
+                items.value = results;
             }
-            // 数量不多，更新结果列表
-            items.value = results;
         }
 
         /**
@@ -276,7 +274,6 @@ const App = {
          * 生命周期：挂载后
          */
         onMounted(() => {
-            // console.log('onMounted');
             // 监听事件
             RendererEvent.on('data-update', onDataUpdate);
             RendererEvent.on('match-reply', onMatchReply);

@@ -18,7 +18,6 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
-        // console.log('setup', props, context);
 
         // 分帧加载定时器
         let loadHandler = null;
@@ -275,7 +274,6 @@ const App = {
          * 生命周期：挂载后
          */
         onMounted(() => {
-            // console.log('onMounted');
             // 监听事件
             RendererEvent.on('data-update', onDataUpdate);
             RendererEvent.on('match-reply', onMatchReply);

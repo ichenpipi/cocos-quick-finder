@@ -1,7 +1,7 @@
 {
   "name": "ccc-quick-finder",
   "version": "1.4.0.20210910",
-  "description": "快速搜索定位项目中的文件，还可以快速打开场景和预制体...",
+  "description": "输入关键字即可快速打开或定位项目中的文件...",
   "author": {
     "name": "陈皮皮 (ifaswind)",
     "email": "952157129@qq.com",

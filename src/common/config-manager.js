@@ -18,57 +18,84 @@ const MENU_ITEM_KEY = `i18n:MAIN_MENU.package.title/i18n:${PACKAGE_NAME}.name/i1
 const CONFIG_PATH = Path.join(__dirname, '../../config.json');
 
 /**
+ * 配置缓存
+ */
+let configCache = null;
+
+/**
  * 配置管理器
  */
 const ConfigManager = {
+
+    /**
+     * 配置缓存
+     */
+    get cache() {
+        if (!configCache) {
+            ConfigManager.get();
+        }
+        return configCache;
+    },
 
     /**
      * 默认配置
      */
     get defaultConfig() {
         return {
-            version: '1.0',
+            version: '1.1',
+            openable: ['.fire', '.prefab'],
             autoCheckUpdate: true,
         };
     },
 
     /**
      * 读取配置
-     * @returns {{ hotkey: string, autoCheckUpdate: boolean }}
      */
     get() {
-        const configData = ConfigManager.defaultConfig;
+        const config = ConfigManager.defaultConfig;
         // 配置
         if (Fs.existsSync(CONFIG_PATH)) {
             const localConfig = JSON.parse(Fs.readFileSync(CONFIG_PATH));
-            configData.autoCheckUpdate = localConfig.autoCheckUpdate;
+            for (const key in config) {
+                if (localConfig[key] !== undefined) {
+                    config[key] = localConfig[key];
+                }
+            }
         }
+        // 缓存起来
+        configCache = JSON.parse(JSON.stringify(config));
+
         // 快捷键
-        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
-            menuItem = packageData['main-menu'][MENU_ITEM_KEY];
-        configData.hotkey = menuItem['accelerator'] || '';
+        const package = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
+            item = package['main-menu'][MENU_ITEM_KEY];
+        config.hotkey = item['accelerator'] || '';
+
         // Done
-        return configData;
+        return config;
     },
 
     /**
      * 保存配置
-     * @param {{ hotkey: string, autoCheckUpdate: boolean }} config 配置
+     * @param {*} value 配置
      */
-    set(config) {
-        const configData = ConfigManager.defaultConfig;
+    set(value) {
+        const config = ConfigManager.defaultConfig;
         // 配置
-        configData.autoCheckUpdate = config.autoCheckUpdate;
-        Fs.writeFileSync(CONFIG_PATH, JSON.stringify(configData, null, 2));
+        config.openable = value.openable;
+        config.autoCheckUpdate = value.autoCheckUpdate;
+        Fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+        // 缓存起来
+        configCache = JSON.parse(JSON.stringify(config));
+
         // 快捷键
-        const packageData = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
-            menuItem = packageData['main-menu'][MENU_ITEM_KEY];
-        if (config.hotkey && config.hotkey !== '') {
-            menuItem['accelerator'] = config.hotkey;
+        const package = JSON.parse(Fs.readFileSync(PACKAGE_PATH)),
+            item = package['main-menu'][MENU_ITEM_KEY];
+        if (value.hotkey && value.hotkey !== '') {
+            item['accelerator'] = value.hotkey;
         } else {
-            delete menuItem['accelerator'];
+            delete item['accelerator'];
         }
-        Fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageData, null, 2));
+        Fs.writeFileSync(PACKAGE_PATH, JSON.stringify(package, null, 2));
     },
 
 };

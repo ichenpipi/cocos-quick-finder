@@ -101,7 +101,7 @@ const PanelManager = {
             return;
         }
         // 窗口尺寸和位置（macOS 标题栏高 28px）
-        const winSize = [500, 340],
+        const winSize = [500, 450],
             winPos = calcWindowPosition(winSize, 'center');
         // 创建窗口
         const win = PanelManager.settings = new BrowserWindow({

@@ -1,4 +1,5 @@
 const Path = require('path');
+const ConfigManager = require('../common/config-manager');
 
 /**
  * 文件打开器
@@ -6,13 +7,27 @@ const Path = require('path');
 const Opener = {
 
     /**
-     * 打开文件
+     * 尝试打开文件
      * @param {string} path 路径
      */
-    open(path) {
+    tryOpen(path) {
         const extname = Path.extname(path),
             uuid = Opener.fspathToUuid(path);
-        // 文件格式
+        // 是否配置了快速打开
+        const { openable } = ConfigManager.cache;
+        if (openable.indexOf(extname) !== -1) {
+            Opener.open(extname, uuid);
+        }
+        // 聚焦到文件（不延迟的话打开预制体会报错）
+        setTimeout(() => Opener.focusOnFile(uuid));
+    },
+
+    /**
+     * 打开文件
+     * @param {string} extname 扩展名
+     * @param {string} uuid Uuid
+     */
+    open(extname, uuid) {
         switch (extname) {
             case '.fire': {
                 Opener.openScene(uuid);
@@ -31,14 +46,11 @@ const Opener = {
                 break;
             }
         }
-        // 聚焦到文件
-        Opener.focusOnFile(uuid);
-        // setTimeout(() => Opener.focusOnFile(uuid));
     },
 
     /**
      * 打开场景
-     * @param {string} uuid uuid
+     * @param {string} uuid Uuid
      */
     openScene(uuid) {
         Editor.Panel.open('scene', { uuid });
@@ -46,7 +58,7 @@ const Opener = {
 
     /**
      * 打开预制体
-     * @param {string} uuid uuid
+     * @param {string} uuid Uuid
      */
     openPrefab(uuid) {
         Editor.Ipc.sendToAll('scene:enter-prefab-edit-mode', uuid);
@@ -54,7 +66,7 @@ const Opener = {
 
     /**
      * 打开文本文件
-     * @param {string} uuid uuid
+     * @param {string} uuid Uuid
      */
     openText(uuid) {
         Editor.Ipc.sendToMain('assets:open-text-file', uuid);
@@ -62,7 +74,7 @@ const Opener = {
 
     /**
      * 聚焦到文件（在资源管理器中显示并选中文件）
-     * @param {string} uuid uuid
+     * @param {string} uuid Uuid
      */
     focusOnFile(uuid) {
         Editor.Ipc.sendToAll('assets:hint', uuid);

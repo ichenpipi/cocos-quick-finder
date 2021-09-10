@@ -55,7 +55,7 @@ function onMatchEvent(event, keyword) {
  */
 function onOpenEvent(event, path) {
     // 打开文件
-    Opener.open(path);
+    Opener.tryOpen(path);
     // 关闭搜索栏
     PanelManager.closeSearchBar();
 }

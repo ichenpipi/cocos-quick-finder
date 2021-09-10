@@ -13,6 +13,10 @@
   --error-color: #ff3030;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -50,7 +54,6 @@ body {
   border: 1px solid var(--border-color);
   border-right: none;
   border-radius: 8px 0 0 8px;
-  box-sizing: border-box;
   color: var(--font-color);
   font-size: 20px;
   user-select: none;
@@ -87,7 +90,6 @@ body {
   background-color: var(--accent-color);
   border: none;
   border-radius: 0 8px 8px 0;
-  box-sizing: border-box;
   color: var(--main-color);
   font-size: 20px;
   user-select: none;
@@ -114,7 +116,6 @@ body {
   background-color: var(--main-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-sizing: border-box;
   box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
   user-select: none;
 }
@@ -158,7 +159,6 @@ body {
   min-height: 30px;
   line-height: 20px;
   padding: 5px 10px;
-  box-sizing: border-box;
   color: var(--font-color);
   list-style: none;
 }

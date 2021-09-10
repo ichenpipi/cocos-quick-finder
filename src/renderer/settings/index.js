@@ -21,7 +21,19 @@ const App = {
      * @param {*} context 
      */
     setup(props, context) {
-        // console.log('setup', props, context);
+
+        // 可以直接打开的所有文件类型
+        const OPENABLE_LIST = ref([
+            { ext: '.fire', type: t('scene') },
+            { ext: '.prefab', type: t('prefab') },
+            { ext: '.ts', type: t('typescript') },
+            { ext: '.js', type: t('javascript') },
+            { ext: '.json', type: t('json') },
+            { ext: '.md', type: t('markdown') },
+            { ext: '.txt', type: t('txt') },
+        ]);
+        // 可以直接打开的文件类型列表
+        const openable = ref(['.fire', '.prefab']);
 
         // 预设快捷键
         const presets = ref([
@@ -68,6 +80,8 @@ const App = {
         function getConfig() {
             const config = ConfigManager.get();
             if (!config) return;
+            // 可打开文件类型
+            openable.value = config.openable;
             // 自动检查更新
             autoCheckUpdate.value = config.autoCheckUpdate;
             // 快捷键
@@ -95,8 +109,9 @@ const App = {
          */
         function setConfig() {
             const config = {
-                autoCheckUpdate: autoCheckUpdate.value,
+                openable: openable.value,
                 hotkey: null,
+                autoCheckUpdate: autoCheckUpdate.value,
             };
             if (selectKey.value === 'custom') {
                 // 自定义输入是否有效
@@ -116,6 +131,25 @@ const App = {
             }
             // 保存到本地
             ConfigManager.set(config);
+        }
+
+        /**
+         * 可打开文件类型勾选变化回调
+         * @param {*} event 
+         * @param {{ ext:string, type: string }} item 
+         */
+        function onOpenableChanged(event, item) {
+            const { ext } = item,
+                index = openable.value.indexOf(ext);
+            if (event.target.checked) {
+                if (index === -1) {
+                    openable.value.push(ext);
+                }
+            } else {
+                if (index !== -1) {
+                    openable.value.splice(index, 1);
+                }
+            }
         }
 
         /**
@@ -139,7 +173,6 @@ const App = {
          * 生命周期：挂载后
          */
         onMounted(() => {
-            // console.log('onMounted');
             // 获取配置
             getConfig();
             // 覆盖 a 标签点击回调（使用默认浏览器打开网页）
@@ -163,12 +196,15 @@ const App = {
         });
 
         return {
+            OPENABLE_LIST,
+            openable,
             presets,
             selectKey,
             customKey,
             autoCheckUpdate,
             repositoryUrl,
             packageName,
+            onOpenableChanged,
             onApplyBtnClick,
             t,
         };

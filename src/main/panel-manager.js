@@ -38,6 +38,7 @@ const PanelManager = {
             height: winSize[1],
             x: winPos[0],
             y: winPos[1] + 200,
+            useContentSize: true,
             frame: false,
             resizable: false,
             fullscreenable: false,
@@ -101,7 +102,7 @@ const PanelManager = {
             return;
         }
         // 窗口尺寸和位置（macOS 标题栏高 28px）
-        const winSize = [500, 450],
+        const winSize = [500, 400],
             winPos = calcWindowPosition(winSize, 'center');
         // 创建窗口
         const win = PanelManager.settings = new BrowserWindow({
@@ -111,6 +112,7 @@ const PanelManager = {
             minHeight: winSize[1],
             x: winPos[0],
             y: winPos[1] - 100,
+            useContentSize: true,
             frame: true,
             title: `${EXTENSION_NAME} | Cocos Creator`,
             autoHideMenuBar: true,
